@@ -1,0 +1,13 @@
+{
+    "name": "0nedark/onespec",
+    "description": "Testing framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dovydas Rupsys",
+            "email": "dovydas.rupsys@outlook.com"
+        }
+    ],
+    "require": {}
+}
