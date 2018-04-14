@@ -1,0 +1,5 @@
+suites:
+    unit:
+        namespace: OneSpec
+        psr4_prefix: OneSpec
+        src_path: "src"

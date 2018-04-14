@@ -7,3 +7,6 @@ start:
 
 shell:
 	docker exec -it onespec sh
+
+test\:%:
+	docker exec -it onespec sh -c "/app/scripts/tests.sh $@ '$(path)' '$(class)' '$(line)'"
