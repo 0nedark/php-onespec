@@ -2,13 +2,13 @@
 
 namespace OneSpec;
 
-use OneSpec\Architect\ClassArchitect;
+use OneSpec\Architect\ClassBuilder;
 use OneSpec\Assertion\BooleanAssertion;
 use OneSpec\Assertion\BaseAssertion;
 use OneSpec\Assertion\IntegerAssertion;
 use OneSpec\Assertion\ObjectAssertion;
 use OneSpec\Assertion\StringAssertion;
-use OneSpec\Error\FailedAssertion;
+use OneSpec\Error\AssertionException;
 use Prophecy\Exception\Doubler\MethodNotFoundException;
 
 class Check
@@ -20,7 +20,7 @@ class Check
     {
         $this->value = $value;
 
-        if ($value instanceof ClassArchitect) {
+        if ($value instanceof ClassBuilder) {
             $object = $value->build();
             $this->assertion = new ObjectAssertion($object);
         } elseif (is_bool($value)) {
@@ -46,7 +46,7 @@ class Check
         $passed = $this->assertion->$method($arguments);
 
         if ($this->hasAssertionFailed($positive, $passed)) {
-            throw new FailedAssertion("$this->value:" . implode(", ", $arguments));
+            throw new AssertionException("$this->value:" . implode(", ", $arguments));
         }
     }
 

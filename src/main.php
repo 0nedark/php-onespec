@@ -6,10 +6,17 @@ require '/app/vendor/autoload.php';
 
 $desc = Describe::class(\DateTime::class);
 
-$desc->setBefore(function ($obj) {
-    $obj->beConstructedWith("now", new \DateTimeZone("Europe/London"));
+$desc->before(function ($obj) {
+    $obj->beConstructedWith("now", new \DateTimeZone("UTC"));
 });
 
-$desc->test("", function ($expect, $obj) {
-    $expect($obj->getTimezone()->getName())->toBeEqualTo("Europe/London");
+$desc->group("asd", function(Describe $desc) {
+    $desc->test("", function ($expect, $obj) {
+        $expect($obj->getTimezone()->getName())->toNotBeEqualTo("Europe/London");
+    });
+
+    $desc->test("", function ($expect, $obj) {
+        $obj->beConstructedWith("now", new \DateTimeZone("Europe/London"));
+        $expect($obj->getTimezone()->getName())->toBeEqualTo("Europe/London");
+    });
 });

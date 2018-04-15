@@ -2,79 +2,91 @@
 
 namespace OneSpec;
 
-use OneSpec\Architect\ClassArchitect;
+use OneSpec\Architect\ClassBuilder;
 
 class Describe
 {
     private $class;
-    private $before;
-    private $after;
-    private $beforeAll;
-    private $afterAll;
+    private $prevBeforeClosures;
+    private $prevAfterClosures;
+    private $beforeClosure;
+    private $afterClosure;
 
     private function __construct(
-        string $class,
-        callable $before = null,
-        callable $after = null,
-        callable $beforeAll = null,
-        callable $afterAll = null
+        ClassBuilder $class,
+        array $before = [],
+        array $after = []
     ) {
         $this->class = $class;
-        $this->before = isset($this->before)
-            ? $before : function () {};
-        $this->after = isset($this->after)
-            ? $after : function () {};
-        $this->beforeAll = isset($this->beforeAll)
-            ? $beforeAll : function () {};
-        $this->afterAll = isset($this->afterAll)
-            ? $this->afterAll : function () {};
+        $this->prevBeforeClosures = $before;
+        $this->prevAfterClosures = $after;
+        $this->beforeClosure = function () {};
+        $this->afterClosure = function () {};
     }
 
     public function group(string $name, callable $group)
     {
-        ($this->beforeAll)();
         $group(new Describe(
             $this->class,
-            $this->before,
-            $this->after,
-            $this->beforeAll,
-            $this->afterAll
+            $this->getBeforeClosures(),
+            $this->getAfterClosures()
         ));
-        ($this->afterAll)();
     }
 
     public function test(string $name, callable $tests)
     {
-        $architect = new ClassArchitect($this->class);
-        ($this->before)($architect);
+        $this->callBeforeClosures();
         $tests(function ($actual) {
             return new Check($actual);
-        }, $architect);
-        ($this->after)($architect);
+        }, $this->class);
+        $this->callAfterClosures();
     }
 
-    public function setBefore(callable $before)
+    public function before(callable $before)
     {
-        $this->before = $before;
+        $this->beforeClosure = $before;
     }
 
-    public function setAfter(callable $after)
+    public function after(callable $after)
     {
-        $this->after = $after;
+        $this->afterClosure = $after;
     }
 
-    public function setBeforeAll(callable $beforeAll)
+    private function getBeforeClosures(): array
     {
-        $this->beforeAll = $beforeAll;
+        return array_merge(
+            $this->prevBeforeClosures,
+            [$this->beforeClosure]
+        );
     }
 
-    public function setAfterAll(callable $afterAll)
+    private function callBeforeClosures()
     {
-        $this->afterAll = $afterAll;
+        $this->class->reset();
+        foreach ($this->prevBeforeClosures as $before) {
+            $before($this->class);
+        }
+        ($this->beforeClosure)($this->class);
+    }
+
+    private function getAfterClosures(): array
+    {
+        return array_merge(
+            $this->prevAfterClosures,
+            [$this->afterClosure]
+        );
+    }
+
+    private function callAfterClosures()
+    {
+        foreach ($this->prevAfterClosures as $after) {
+            $after($this->class);
+        }
+        ($this->afterClosure)($this->class);
     }
 
     public static function class(string $class)
     {
-        return new Describe($class);
+        return new Describe(new ClassBuilder($class));
     }
 }
