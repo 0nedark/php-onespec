@@ -4,13 +4,15 @@ namespace OneSpec\Check;
 
 trait Equality
 {
-    public function beEqualTo(array $arguments): bool
+    public function beEqualTo(array $arguments): array
     {
-        return $this->value == $arguments[0];
+        $passed = $this->value == $arguments[0];
+        return [$passed, "", $arguments[0], $this->value];
     }
 
-    public function beIdenticalTo(array $arguments): bool
+    public function beIdenticalTo(array $arguments): array
     {
-        return $this->value === $arguments[0];
+        $passed = $this->value === $arguments[0];
+        return [$passed, "", $arguments[0], $this->value];
     }
 }

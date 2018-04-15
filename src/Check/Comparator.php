@@ -4,33 +4,39 @@ namespace OneSpec\Check;
 
 trait Comparator
 {
-    public function beGreaterThan(array $arguments): bool
+    public function beGreaterThan(array $arguments): array
     {
-        return $this->value > $arguments[0];
+        $passed = $this->value > $arguments[0];
+        return [$passed, "", $arguments[0], $this->value];
     }
 
-    public function beGreaterThanOrEqualTo(array $arguments): bool
+    public function beGreaterThanOrEqualTo(array $arguments): array
     {
-        return $this->value >= $arguments[0];
+        $passed = $this->value >= $arguments[0];
+        return [$passed, "", $arguments[0], $this->value];
     }
 
-    public function beLessThan(array $arguments): bool
+    public function beLessThan(array $arguments): array
     {
-        return $this->value < $arguments[0];
+        $passed = $this->value < $arguments[0];
+        return [$passed, "", $arguments[0], $this->value];
     }
 
-    public function beLessThanOrEqualTo(array $arguments): bool
+    public function beLessThanOrEqualTo(array $arguments): array
     {
-        return $this->value <= $arguments[0];
+        $passed = $this->value <= $arguments[0];
+        return [$passed, "", $arguments[0], $this->value];
     }
 
-    public function beExclusivelyBetween(array $arguments): bool
+    public function beExclusivelyBetween(array $arguments): array
     {
-        return $this->value > $arguments[0] && $this->value < $arguments[1];
+        $passed = $this->value > $arguments[0] && $this->value < $arguments[1];
+        return [$passed, "", "min($arguments[0]), max($arguments[1])", $this->value];
     }
 
-    public function beInclusivelyBetween(array $arguments): bool
+    public function beInclusivelyBetween(array $arguments): array
     {
-        return $this->value >= $arguments[0] && $this->value <= $arguments[1];
+        $passed = $this->value >= $arguments[0] && $this->value <= $arguments[1];
+        return [$passed, "", "min($arguments[0]), max($arguments[1])", $this->value];
     }
 }

@@ -8,8 +8,6 @@
 
 namespace OneSpec\Architect\Error;
 
-use Exception;
-
-class ConstructorException extends Exception
+class ConstructorException extends \Exception
 {
 }

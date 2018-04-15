@@ -3,6 +3,7 @@
 namespace OneSpec;
 
 use OneSpec\Architect\ClassBuilder;
+use OneSpec\Error\AssertionException;
 
 class Describe
 {
@@ -11,6 +12,7 @@ class Describe
     private $prevAfterClosures;
     private $beforeClosure;
     private $afterClosure;
+    private $output;
 
     private function __construct(
         ClassBuilder $class,
@@ -22,24 +24,50 @@ class Describe
         $this->prevAfterClosures = $after;
         $this->beforeClosure = function () {};
         $this->afterClosure = function () {};
+        $this->output = (object)[];
     }
 
     public function group(string $name, callable $group)
     {
-        $group(new Describe(
+        $desc = new Describe(
             $this->class,
             $this->getBeforeClosures(),
             $this->getAfterClosures()
-        ));
+        );
+
+        $group($desc);
+
+        $key = $this->getUniqueKey($name);
+        $this->output->$key = $desc->getOutput();
     }
 
     public function test(string $name, callable $tests)
     {
-        $this->callBeforeClosures();
-        $tests(function ($actual) {
-            return new Check($actual);
-        }, $this->class);
-        $this->callAfterClosures();
+        $result = (object)[
+            "status" => "PASSED"
+        ];
+
+        try {
+            $this->callBeforeClosures();
+            $tests(function ($actual) {
+                return new Check($actual);
+            }, $this->class);
+            $this->callAfterClosures();
+        } catch (\Exception $e) {
+            if ($e instanceof AssertionException) {
+                $result->status = "FAILED";
+                $result->message = $e->getMessage();
+                $result->expected = $e->getExpected();
+                $result->positive = (int)$e->isPositive();
+                $result->actual = $e->getActual();
+            } else {
+                $result->status = "ERROR";
+                $result->message = $e->getMessage();
+            }
+        }
+
+        $key = $this->getUniqueKey($name);
+        $this->output->$key = $result;
     }
 
     public function before(callable $before)
@@ -50,6 +78,11 @@ class Describe
     public function after(callable $after)
     {
         $this->afterClosure = $after;
+    }
+
+    public function getOutput(): \stdClass
+    {
+        return $this->output;
     }
 
     private function getBeforeClosures(): array
@@ -83,6 +116,14 @@ class Describe
             $after($this->class);
         }
         ($this->afterClosure)($this->class);
+    }
+
+    private function getUniqueKey(string $name): string
+    {
+        do {
+            $key = bin2hex(openssl_random_pseudo_bytes(3)) . ": $name";
+        } while (property_exists($this->output, $key));
+        return $key;
     }
 
     public static function class(string $class)

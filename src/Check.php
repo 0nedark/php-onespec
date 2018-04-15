@@ -43,10 +43,15 @@ class Check
     public function __call($name, $arguments)
     {
         [$positive, $method] = $this->getTestMethod($name);
-        $passed = $this->assertion->$method($arguments);
+        [
+            $passed,
+            $message,
+            $expected,
+            $actual
+        ] = $this->assertion->$method($arguments);
 
         if ($this->hasAssertionFailed($positive, $passed)) {
-            throw new AssertionException("$this->value:" . implode(", ", $arguments));
+            throw new AssertionException($message, $expected, $positive, $actual);
         }
     }
 
