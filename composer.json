@@ -9,11 +9,9 @@
             "email": "dovydas.rupsys@outlook.com"
         }
     ],
-    "require": {
-        "phpunit/phpunit": "^7.1"
-    },
+    "require": {},
     "require-dev": {
-        "phpspec/phpspec": "^4.3"
+        "phpunit/phpunit": "^7.1"
     },
     "autoload": {
         "psr-4": {
