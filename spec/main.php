@@ -2,23 +2,25 @@
 
 namespace OneSpec;
 
-$desc = Describe::class(\DateTime::class);
+use OneSpec\Architect\ClassBuilder;
 
-$desc->before(function ($obj) {
+$spec = Spec::class(\DateTime::class);
+
+$spec->before(function (ClassBuilder $obj) {
     $obj->beConstructedWith("now", new \DateTimeZone("UTC"));
 });
 
-$desc->describe("asd", function(Describe $desc) {
-    $desc->test("", function ($expect, $obj) {
+$spec->describe("asd", function(Spec $spec) {
+    $spec->test("", function ($expect, $obj) {
         $expect($obj->getTimezone()->getName())->toBeEqualTo("Europe/London");
     });
 
-    $desc->describe("qwe", function(Describe $desc) {
-        $desc->test("", function ($expect, $obj) {
+    $spec->describe("qwe", function(Spec $spec) {
+        $spec->test("", function ($expect, ClassBuilder $obj) {
             $obj->beConstructedWith("now", new \DateTimeZone("Europe/London"));
             $expect($obj->getTimezone()->getName())->toNotBeEqualTo("Europe/London");
         });
     });
 });
 
-return $desc;
+return $spec;

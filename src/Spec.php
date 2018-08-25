@@ -5,7 +5,7 @@ namespace OneSpec;
 use OneSpec\Architect\ClassBuilder;
 use OneSpec\Error\AssertionException;
 
-class Describe
+class Spec
 {
     private $class;
     private $prevBeforeClosures;
@@ -29,7 +29,7 @@ class Describe
 
     public function describe(string $name, callable $group)
     {
-        $desc = new Describe(
+        $desc = new Spec(
             $this->class,
             $this->getBeforeClosures(),
             $this->getAfterClosures()
@@ -128,6 +128,6 @@ class Describe
 
     public static function class(string $class)
     {
-        return new Describe(new ClassBuilder($class));
+        return new Spec(new ClassBuilder($class));
     }
 }
