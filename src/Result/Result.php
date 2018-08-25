@@ -76,4 +76,28 @@ class Result
     {
         return $this->line;
     }
+
+    /**
+     * @return string
+     */
+    public function getExpected(): string
+    {
+        return $this->expected;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPositive(): int
+    {
+        return $this->positive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActual(): string
+    {
+        return $this->actual;
+    }
 }

@@ -8,8 +8,6 @@
 
 namespace OneSpec\Cli;
 
-use function Functional\concat;
-use function Functional\intersperse;
 use function Functional\map;
 use OneSpec\PrintInterface;
 use OneSpec\Result\Result;
@@ -62,12 +60,22 @@ class Printer implements PrintInterface
 
         switch ($result->getStatus()) {
             case Status::FAILED:
+                $message = $result->getMessage();
+                $this->io->writeln($this->createLines($indentation, $message, true));
+                $expected = $result->getExpected();
+                $actual = $result->getActual();
+                if ($result->getPositive()) {
+                    $message = "Expected to get <pass>${expected}</pass> but received <failure>${actual}</failure>";
+                    $this->io->writeln($this->createLines($indentation + 2, $message, true));
+                } else {
+                    $message = "Expected to not get <pass>${expected}</pass> but received <failure>${actual}</failure>";
+                    $this->io->writeln($this->createLines($indentation + 2, $message, true));
+                }
+
                 break;
             case Status::ERROR:
                 $message = 'An error was thrown during a test -> ' . $result->getMessage() . ', in file ' . $result->getFile() . ' on line ' . $result->getLine();
-                $this->io->writeln(map($this->createLines($indentation, $message, true), function ($line) {
-                    return $line;
-                }));
+                $this->io->writeln($this->createLines($indentation, $message, true));
                 break;
         }
     }
