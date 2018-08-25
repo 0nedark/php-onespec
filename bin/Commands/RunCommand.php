@@ -24,6 +24,16 @@ class RunCommand extends Command
      * @var OutputInterface
      */
     private $output;
+    /**
+     * @var Config
+     */
+    private $config;
+
+    public function __construct(string $name = null)
+    {
+        $this->config = new Config();
+        parent::__construct($name);
+    }
 
     protected function configure()
     {
@@ -50,7 +60,7 @@ class RunCommand extends Command
             if ($fileInfo->isDirectory) {
                 $folders[] = $fileInfo->getFileName;
                 $this->runTests($fileInfo->getPathName, $folders);
-            } else {
+            } elseif ($fileInfo->isSpec) {
                 $folders[] = $fileInfo->getFileName;
                 $path = intersperse($folders, '/');
                 $this->output->writeln(concat(...$path));
@@ -61,6 +71,7 @@ class RunCommand extends Command
     private function toDirectory(): callable {
         return function (DirectoryIterator $fileInfo) {
             return (object)[
+                "isSpec" => (bool)preg_match('/.+Spec.php$/', $fileInfo->getFilename()),
                 "isValid" => !$fileInfo->isDot(),
                 "isDirectory" => $fileInfo->isDir(),
                 "getPathName" => $fileInfo->getPathname(),
