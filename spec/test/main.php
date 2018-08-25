@@ -2,8 +2,6 @@
 
 namespace OneSpec;
 
-require '/app/vendor/autoload.php';
-
 $desc = Describe::class(\DateTime::class);
 
 $desc->before(function ($obj) {
@@ -23,4 +21,4 @@ $desc->group("asd", function(Describe $desc) {
     });
 });
 
-print_r($desc->getOutput());
+return $desc;
