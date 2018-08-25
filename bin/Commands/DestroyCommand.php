@@ -20,11 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DestroyCommand extends Command
 {
-    /**
-     * @var OutputInterface
-     */
-    private $output;
-
     protected function configure()
     {
         $this->setName('destroy')
@@ -34,6 +29,6 @@ class DestroyCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
+        $output->writeln('<comment>Not implemented...</comment>');
     }
 }
