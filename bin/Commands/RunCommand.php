@@ -64,9 +64,8 @@ class RunCommand extends Command
                 $folders[] = $fileInfo->getFileName;
                 $file = $this->config->buildSpecPath($folders);
 
-                /** @var Spec $spec */
                 $spec = null; require $file;
-                var_dump($spec->getOutput());
+                $this->outputTestResults($spec);
             }
         };
     }
@@ -87,5 +86,10 @@ class RunCommand extends Command
         return function ($directory) {
             return $directory->isValid;
         };
+    }
+
+    private function outputTestResults(Spec $spec)
+    {
+        var_dump($spec->getOutput());
     }
 }
