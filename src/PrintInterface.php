@@ -12,6 +12,6 @@ use OneSpec\Result\Result;
 
 interface PrintInterface
 {
-    function result(string $name, Result $result, int $depth);
-    function title(string $name, int $depth);
+    function result(string $id, string $name, Result $result, int $depth);
+    function title(string $id, string $name, int $depth);
 }

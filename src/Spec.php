@@ -85,11 +85,12 @@ class Spec
     public function printResults(PrintInterface $print, int $depth = 0)
     {
         foreach ($this->output as $key => $value) {
+            [$id, $name] = explode(':', $key);
             if ($value instanceof Spec) {
-                $print->title($key, $depth);
+                $print->title($id, $name, $depth);
                 $value->printResults($print, $depth + 1);
             } else {
-                $print->result($key, $value, $depth);
+                $print->result($id, $name, $value, $depth);
             }
         }
     }
