@@ -64,8 +64,9 @@ class RunCommand extends Command
                 $folders[] = $fileInfo->getFileName;
                 $file = $this->config->buildSpecPath($folders);
 
-                /** @var Spec $file */
-                $spec = include $file;
+                /** @var Spec $spec */
+                $spec = null; require $file;
+                var_dump($spec->getOutput());
             }
         };
     }

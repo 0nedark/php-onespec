@@ -22,5 +22,3 @@ $spec->describe("asd", function(Spec $spec) {
         });
     });
 });
-
-return $spec;
