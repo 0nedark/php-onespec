@@ -9,11 +9,11 @@
 namespace OneSpec\Cli\Commands;
 
 use DirectoryIterator;
-use function Functional\concat;
 use function Functional\map;
 use function Functional\each;
 use function Functional\filter;
-use function Functional\intersperse;
+use OneSpec\Cli\Config;
+use OneSpec\Spec;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -62,8 +62,10 @@ class RunCommand extends Command
                 $this->runTests($fileInfo->getPathName, $folders);
             } elseif ($fileInfo->isSpec) {
                 $folders[] = $fileInfo->getFileName;
-                $path = intersperse($folders, '/');
-                $this->output->writeln(concat(...$path));
+                $file = $this->config->buildSpecPath($folders);
+
+                /** @var Spec $file */
+                $spec = include $file;
             }
         };
     }
