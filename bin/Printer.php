@@ -13,6 +13,7 @@ use function Functional\intersperse;
 use function Functional\map;
 use OneSpec\PrintInterface;
 use OneSpec\Result\Result;
+use OneSpec\Result\Status;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -30,12 +31,14 @@ class Printer implements PrintInterface
 
     public function __construct(SymfonyStyle $io)
     {
-        $success = new OutputFormatterStyle('green', null);
-        $failure = new OutputFormatterStyle('red', null);
-        $error = new OutputFormatterStyle('magenta', null);
+        $success = new OutputFormatterStyle('green', null, ['bold']);
+        $failure = new OutputFormatterStyle('red', null, ['bold']);
+        $error = new OutputFormatterStyle('magenta', null, ['bold']);
+        $comment = new OutputFormatterStyle('yellow', null, ['bold']);
         $io->getFormatter()->setStyle('PASS', $success);
         $io->getFormatter()->setStyle('FAILURE', $failure);
         $io->getFormatter()->setStyle('ERROR', $error);
+        $io->getFormatter()->setStyle('WARNING', $comment);
         $this->io = $io;
         $this->width = (new Terminal())->getWidth() - 2;
     }
@@ -52,24 +55,33 @@ class Printer implements PrintInterface
         return $lines;
     }
 
-    function result(string $name, Result $result, int $depth)
+    function result(string $id, string $name, Result $result, int $depth)
     {
-        $this->title($name, $depth, $result->getStatus());
+        $this->title($id, $name, $depth, $result->getStatus());
+        $indentation = $depth * self::INDENTATION + strlen($id . ': ');
+
+        switch ($result->getStatus()) {
+            case Status::FAILED:
+                break;
+            case Status::ERROR:
+                $message = 'An error was thrown during a test -> ' . $result->getMessage() . ', in file ' . $result->getFile() . ' on line ' . $result->getLine();
+                $this->io->writeln(map($this->createLines($indentation, $message, true), function ($line) {
+                    return $line;
+                }));
+                break;
+        }
     }
 
-    function title(string $name, int $depth, string $status = 'COMMENT')
+    function title(string $id, string $name, int $depth, string $status = 'WARNING')
     {
-        [$id, $test] = explode(': ', $name);
-        $prefix = $id . ': ';
         $indentation = $depth * self::INDENTATION;
-
-        $this->io->write(map($this->createLines($indentation, $prefix, true), function ($prefix) use ($status) {
-            [$id] = explode(': ', $prefix);
-            return "<${status}>" . $id . '</>: ';
+        $this->io->write(map($this->createLines($indentation, $id, true), function ($id) use ($status) {
+            return "<${status}>" . $id . "</${status}>:";
         }));
 
-        $this->io->writeln(map($this->createLines($indentation + strlen($prefix), $test), function ($line) {
-            return '<comment>' . $line . '</comment>';
+        $indentation += strlen($id . ': ');
+        $this->io->writeln(map($this->createLines($indentation, $name) , function ($line) {
+            return $line;
         }));
     }
 }

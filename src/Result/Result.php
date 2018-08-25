@@ -40,6 +40,7 @@ class Result
 
     public function setErrorDetails(string $message, string $file, int $line)
     {
+        $this->message = $message;
         $this->file = $file;
         $this->line = $line;
     }
@@ -50,5 +51,29 @@ class Result
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFile(): string
+    {
+        return $this->file;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLine(): int
+    {
+        return $this->line;
     }
 }
