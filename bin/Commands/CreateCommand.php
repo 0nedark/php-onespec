@@ -8,8 +8,6 @@
 
 namespace OneSpec\Cli\Commands;
 
-use function Functional\concat;
-use function Functional\intersperse;
 use OneSpec\Cli\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,10 +20,6 @@ class CreateCommand extends Command
      * @var Config
      */
     private $config;
-    /**
-     * @var OutputInterface
-     */
-    private $output;
 
     public function __construct(string $name = null)
     {
@@ -43,27 +37,20 @@ class CreateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
-        $specArray = $this->config->getSpecFolders();
         $classArray = explode('/', $input->getArgument('class'));
-        $pathArray = array_merge($specArray, $classArray);
-        $file = array_pop($pathArray) . 'Spec.php';
-        $path = concat(...intersperse($pathArray, '/'));
+        $file = array_pop($classArray) . 'Spec.php';
+
+        $path = $this->config->buildSpecPath($classArray);
         if(!file_exists($path)) {
             mkdir($path, 0777, true);
         }
 
-        $this->createFile($path, $file);
-    }
-
-    private function createFile(string $path, string $file)
-    {
         $fullPath = $path . '/' . $file;
         if(file_exists($fullPath)) {
-            $this->output->writeln("<comment>File '<info>" . $fullPath . "</info>' already exists</comment>");
+            $output->writeln("<comment>File '<info>" . $fullPath . "</info>' already exists</comment>");
         } else {
             touch($fullPath);
-            $this->output->writeln("<comment>File '<info>" . $fullPath . "</info>' was created successfully</comment>");
+            $output->writeln("<comment>File '<info>" . $fullPath . "</info>' was created successfully</comment>");
         }
     }
 }

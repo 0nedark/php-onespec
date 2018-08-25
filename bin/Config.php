@@ -8,6 +8,9 @@
 
 namespace OneSpec\Cli;
 
+use function Functional\concat;
+use function Functional\intersperse;
+
 class Config
 {
     private $config;
@@ -33,5 +36,16 @@ class Config
     public function getSpecFolders(): array
     {
         return $this->spec;
+    }
+
+    /**
+     * @param string[] $path
+     *
+     * @return string
+     */
+    public function buildSpecPath(array $path): string
+    {
+        $parts = array_merge($this->spec, $path);
+        return concat(...intersperse($parts, '/'));
     }
 }
