@@ -94,11 +94,6 @@ class Spec
         }
     }
 
-    private function getOutput()
-    {
-        return $this->output;
-    }
-
     private function getBeforeClosures(): array
     {
         return array_merge(
