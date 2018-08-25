@@ -4,10 +4,12 @@ namespace OneSpec;
 
 use OneSpec\Architect\ClassBuilder;
 use OneSpec\Error\AssertionException;
+use OneSpec\Result\Result;
+use OneSpec\Result\Status;
 
 class Spec
 {
-    private $class;
+    private $classBuilder;
     private $prevBeforeClosures;
     private $prevAfterClosures;
     private $beforeClosure;
@@ -15,11 +17,11 @@ class Spec
     private $output;
 
     private function __construct(
-        ClassBuilder $class,
+        ClassBuilder $classBuilder,
         array $before = [],
         array $after = []
     ) {
-        $this->class = $class;
+        $this->classBuilder = $classBuilder;
         $this->prevBeforeClosures = $before;
         $this->prevAfterClosures = $after;
         $this->beforeClosure = function () {};
@@ -27,42 +29,42 @@ class Spec
         $this->output = (object)[];
     }
 
-    public function describe(string $name, callable $group)
+    public function describe(string $name, callable $describe)
     {
-        $desc = new Spec(
-            $this->class,
+        $spec = new Spec(
+            $this->classBuilder,
             $this->getBeforeClosures(),
             $this->getAfterClosures()
         );
 
-        $group($desc);
+        $describe($spec);
 
         $key = $this->getUniqueKey($name);
-        $this->output->$key = $desc->getOutput();
+        $this->output->$key = $spec;
     }
 
     public function test(string $name, callable $tests)
     {
-        $result = (object)[
-            "status" => "PASSED"
-        ];
+        $result = new Result();
 
         try {
             $this->callBeforeClosures();
             $tests(function ($actual) {
                 return new Check($actual);
-            }, $this->class);
+            }, $this->classBuilder);
             $this->callAfterClosures();
         } catch (\Exception $e) {
             if ($e instanceof AssertionException) {
-                $result->status = "FAILED";
-                $result->message = $e->getMessage();
-                $result->expected = $e->getExpected();
-                $result->positive = (int)$e->isPositive();
-                $result->actual = $e->getActual();
+                $result = new Result(Status::FAILED);
+                $result->setFailureDetails(
+                    $e->getMessage(),
+                    $e->getExpected(),
+                    (int)$e->isPositive(),
+                    $e->getActual()
+                );
             } else {
-                $result->status = "ERROR";
-                $result->message = $e->getMessage();
+                $result = new Result(Status::ERROR);
+                $result->setErrorDetails($e->getMessage(), $e->getFile(), $e->getLine());
             }
         }
 
@@ -95,11 +97,11 @@ class Spec
 
     private function callBeforeClosures()
     {
-        $this->class->reset();
+        $this->classBuilder->reset();
         foreach ($this->prevBeforeClosures as $before) {
-            $before($this->class);
+            $before($this->classBuilder);
         }
-        ($this->beforeClosure)($this->class);
+        ($this->beforeClosure)($this->classBuilder);
     }
 
     private function getAfterClosures(): array
@@ -113,9 +115,9 @@ class Spec
     private function callAfterClosures()
     {
         foreach ($this->prevAfterClosures as $after) {
-            $after($this->class);
+            $after($this->classBuilder);
         }
-        ($this->afterClosure)($this->class);
+        ($this->afterClosure)($this->classBuilder);
     }
 
     private function getUniqueKey(string $name): string
