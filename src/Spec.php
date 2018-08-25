@@ -82,7 +82,19 @@ class Spec
         $this->afterClosure = $after;
     }
 
-    public function getOutput(): \stdClass
+    public function printResults(PrintInterface $print, int $depth = 0)
+    {
+        foreach ($this->output as $key => $value) {
+            if ($value instanceof Spec) {
+                $print->title($key, $depth);
+                $value->printResults($print, $depth + 1);
+            } else {
+                $print->result($key, $value, $depth);
+            }
+        }
+    }
+
+    private function getOutput()
     {
         return $this->output;
     }

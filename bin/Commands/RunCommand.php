@@ -13,21 +13,20 @@ use function Functional\map;
 use function Functional\each;
 use function Functional\filter;
 use OneSpec\Cli\Config;
+use OneSpec\Cli\Printer;
 use OneSpec\Spec;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class RunCommand extends Command
 {
     /**
-     * @var OutputInterface
-     */
-    private $output;
-    /**
      * @var Config
      */
     private $config;
+    private $printer;
 
     public function __construct(string $name = null)
     {
@@ -44,7 +43,7 @@ class RunCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
+        $this->printer = new Printer(new SymfonyStyle($input, $output));
         $this->runTests('./spec');
     }
 
@@ -90,6 +89,6 @@ class RunCommand extends Command
 
     private function outputTestResults(Spec $spec)
     {
-        var_dump($spec->getOutput());
+        $spec->printResults($this->printer);
     }
 }
