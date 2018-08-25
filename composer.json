@@ -9,13 +9,16 @@
             "email": "dovydas.rupsys@outlook.com"
         }
     ],
-    "require": {},
-    "require-dev": {
-        "phpunit/phpunit": "^7.1"
+    "require": {
+        "ext-openssl": "^7.1",
+        "lstrojny/functional-php": "^1.8",
+        "symfony/console": "^4.1"
     },
+    "require-dev": {},
     "autoload": {
         "psr-4": {
-            "OneSpec\\": "src/"
+            "OneSpec\\": "src/",
+            "OneSpec\\Cli\\": "bin/"
         }
     }
 }
