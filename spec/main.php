@@ -8,12 +8,12 @@ $desc->before(function ($obj) {
     $obj->beConstructedWith("now", new \DateTimeZone("UTC"));
 });
 
-$desc->group("asd", function(Describe $desc) {
+$desc->describe("asd", function(Describe $desc) {
     $desc->test("", function ($expect, $obj) {
         $expect($obj->getTimezone()->getName())->toBeEqualTo("Europe/London");
     });
 
-    $desc->group("qwe", function(Describe $desc) {
+    $desc->describe("qwe", function(Describe $desc) {
         $desc->test("", function ($expect, $obj) {
             $obj->beConstructedWith("now", new \DateTimeZone("Europe/London"));
             $expect($obj->getTimezone()->getName())->toNotBeEqualTo("Europe/London");

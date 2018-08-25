@@ -27,7 +27,7 @@ class Describe
         $this->output = (object)[];
     }
 
-    public function group(string $name, callable $group)
+    public function describe(string $name, callable $group)
     {
         $desc = new Describe(
             $this->class,
