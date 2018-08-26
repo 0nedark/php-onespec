@@ -131,6 +131,11 @@ class Spec
         ($this->afterClosure)($this->classBuilder);
     }
 
+    /**
+     * @param string $name
+     * @return string
+     * @throws \Exception
+     */
     private function getUniqueKey(string $name): string
     {
         $key = md5($name) . ": $name";

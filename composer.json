@@ -10,7 +10,6 @@
         }
     ],
     "require": {
-        "ext-openssl": "^7.1",
         "lstrojny/functional-php": "^1.8",
         "symfony/console": "^4.1",
         "ext-json": "^1.5"
