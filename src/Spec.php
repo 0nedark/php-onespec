@@ -110,7 +110,7 @@ class Spec
         };
     }
 
-    private function getOutputFromKey(string $key, string $status = Status::NONE): Output
+    private function getOutputFromKey(string $key, string $status = Status::WARNING): Output
     {
         [$id, $name] = explode(':', $key);
         return new Output(

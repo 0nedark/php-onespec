@@ -40,6 +40,8 @@ class Printer implements PrintInterface
         $io->getFormatter()->setStyle('success', $success);
         $failure = new OutputFormatterStyle('red', null, ['bold']);
         $io->getFormatter()->setStyle('failure', $failure);
+        $warning = new OutputFormatterStyle('yellow', null, ['bold']);
+        $io->getFormatter()->setStyle('warning', $warning);
         $error = new OutputFormatterStyle('magenta');
         $io->getFormatter()->setStyle('exception', $error);
 
@@ -49,7 +51,6 @@ class Printer implements PrintInterface
 
     private function isWordKey(string $word): bool
     {
-//        $this->io->writeln($word);
         $found = preg_match('/^:[A-z0-9]+$/', $word,$matches);
         return $found;
     }
@@ -58,7 +59,7 @@ class Printer implements PrintInterface
     {
         $value = $binding->getDecoratedValue();
         if ($binding->getColor() === Color::NONE) {
-            return '<secondary>' . $value . '</>';
+            return $value;
         } else {
             return '<' . $binding->getColor() . '>' . $value . '</>';
         }
