@@ -21,7 +21,7 @@ class Text
     /**
      * @var string[]
      */
-    private $decorations;
+    private $decorators;
 
     /**
      * Binding constructor.
@@ -33,7 +33,7 @@ class Text
     {
         $this->value = $value;
         $this->color = $color;
-        $this->decorations = $decorators;
+        $this->decorators = $decorators;
     }
 
     /**
@@ -47,6 +47,21 @@ class Text
     /**
      * @return string
      */
+    public function getDecoratedValue(): string
+    {
+        $value = $this->value;
+        foreach ($this->decorators as $decorator) {
+            if ($decorator === 'KEY') {
+                $value = substr($this->value, 0, 4);
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * @return string
+     */
     public function getColor(): string
     {
         return $this->color;
@@ -55,8 +70,8 @@ class Text
     /**
      * @return string[]
      */
-    public function getDecorations(): array
+    public function getDecorators(): array
     {
-        return $this->decorations;
+        return $this->decorators;
     }
 }

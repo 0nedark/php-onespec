@@ -3,9 +3,10 @@
  * Created by PhpStorm.
  * User: drupsys
  * Date: 26/08/18
- * Time: 08:57
+ * Time: 17:29
  */
 
 namespace OneSpec\Result;
 
-interface Binding extends \Traversable {}
+
+interface Word extends \Traversable {}

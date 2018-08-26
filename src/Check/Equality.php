@@ -3,16 +3,16 @@
 namespace OneSpec\Check;
 
 use OneSpec\Result\Color;
-use OneSpec\Result\Result;
+use OneSpec\Result\Output;
 use OneSpec\Result\Text;
 
 trait Equality
 {
-    public function beEqualTo(array $arguments): Result
+    public function beEqualTo(array $arguments): Output
     {
         $passed = $this->hasAssertionFailed($this->value == $arguments[0]);
         $positive = $this->positive ? 'get' : 'not get';
-        return new Result(
+        return new Output(
             $this->getStatus($passed),
             new Text("Expected to ${positive} :expected but received :actual", Color::PRIMARY),
             [
@@ -22,11 +22,11 @@ trait Equality
         );
     }
 
-    public function beIdenticalTo(array $arguments): Result
+    public function beIdenticalTo(array $arguments): Output
     {
         $passed = $this->hasAssertionFailed($this->value === $arguments[0]);
         $positive = $this->positive ? 'be' : 'not be';
-        return new Result(
+        return new Output(
             $this->getStatus($passed),
             new Text("Expected :expected to ${positive} identical to :actual", Color::PRIMARY),
             [

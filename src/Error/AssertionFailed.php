@@ -2,26 +2,26 @@
 
 namespace OneSpec\Error;
 
-use OneSpec\Result\Result;
+use OneSpec\Result\Output;
 
 class AssertionFailed extends \Exception
 {
 
     /**
-     * @var Result
+     * @var Output
      */
     private $result;
 
-    public function __construct(Result $result)
+    public function __construct(Output $result)
     {
         parent::__construct("Assertion failed!");
         $this->result = $result;
     }
 
     /**
-     * @return Result
+     * @return Output
      */
-    public function getResult(): Result
+    public function getResult(): Output
     {
         return $this->result;
     }

@@ -8,10 +8,13 @@
 
 namespace OneSpec\Result;
 
-use Symfony\Component\Console\Terminal;
+use function Functional\filter;
+use function Functional\flatten;
+use function Functional\map;
+use function Functional\zip_all;
 use Traversable;
 
-class Result implements \IteratorAggregate, Binding
+class Output implements \IteratorAggregate, Word
 {
     /**
      * @var string
@@ -57,6 +60,15 @@ class Result implements \IteratorAggregate, Binding
     }
 
     /**
+     * @param string $key
+     * @return Text
+     */
+    public function getBinding(string $key): Text
+    {
+        return $this->bindings[str_replace(':', '', $key)];
+    }
+
+    /**
      * Retrieve an external iterator
      * @link https://php.net/manual/en/iteratoraggregate.getiterator.php
      * @return Traversable An instance of an object implementing <b>Iterator</b> or
@@ -65,6 +77,14 @@ class Result implements \IteratorAggregate, Binding
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->bindings);
+        preg_match_all('/:[a-z0-9]+/', $this->message->getValue(), $bindings);
+        $splits = preg_split('/:[a-z0-9]+/', $this->message->getValue());
+        $words = flatten(map(flatten(zip_all($splits, $bindings[0])), function ($split) {
+            return explode(' ', $split);
+        }));
+
+        return new \ArrayIterator(filter($words, function ($word) {
+            return !empty($word);
+        }));
     }
 }

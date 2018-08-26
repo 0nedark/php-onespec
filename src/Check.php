@@ -11,7 +11,7 @@ use OneSpec\Assertion\ObjectAssertion;
 use OneSpec\Assertion\StringAssertion;
 use OneSpec\Error\AssertionFailed;
 use OneSpec\Error\InvalidAssertionMethod;
-use OneSpec\Result\Result;
+use OneSpec\Result\Output;
 use OneSpec\Result\Status;
 
 class Check
@@ -87,10 +87,10 @@ class Check
     }
 
     /**
-     * @param Result $result
+     * @param Output $result
      * @throws AssertionFailed
      */
-    private function handleResult(Result $result)
+    private function handleResult(Output $result)
     {
         if ($result->getStatus() === Status::FAILURE) {
             throw new AssertionFailed($result);
