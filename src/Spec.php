@@ -57,7 +57,7 @@ class Spec
                 $result = $e->getResult();
             } else {
                 $result = new Result(
-                    Status::ERROR,
+                    Status::EXCEPTION,
                     'An error was thrown during the test: (:error) -> (file :file) -> (line :line)',
                     ['error' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine()]
                 );
@@ -133,9 +133,11 @@ class Spec
 
     private function getUniqueKey(string $name): string
     {
-        do {
-            $key = bin2hex(openssl_random_pseudo_bytes(2)) . ": $name";
-        } while (property_exists($this->output, $key));
+        $key = md5($name) . ": $name";
+        if (property_exists($this->output, $key)) {
+            throw new \Exception("Tests must have different names");
+        }
+
         return $key;
     }
 

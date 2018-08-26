@@ -12,5 +12,5 @@ class Status
 {
     const PASSED = 'PASSED';
     const FAILED = 'FAILED';
-    const ERROR = 'ERROR';
+    const EXCEPTION = 'EXCEPTION';
 }

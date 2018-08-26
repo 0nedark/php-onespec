@@ -35,7 +35,7 @@ class Printer implements PrintInterface
         $comment = new OutputFormatterStyle('yellow', null, ['bold']);
         $io->getFormatter()->setStyle('PASSED', $success);
         $io->getFormatter()->setStyle('FAILED', $failure);
-        $io->getFormatter()->setStyle('ERROR', $error);
+        $io->getFormatter()->setStyle('EXCEPTION', $error);
         $io->getFormatter()->setStyle('WARNING', $comment);
         $this->io = $io;
         $this->width = (new Terminal())->getWidth() - 2;
@@ -56,8 +56,9 @@ class Printer implements PrintInterface
     function result(string $id, string $name, Result $result, int $depth)
     {
         $this->title($id, $name, $depth, $result->getStatus());
+        $shortId = substr($id, 0, 4);
         if ($result->getStatus() !== 'PASSED') {
-            $indentation = $depth * self::INDENTATION + strlen($id . ': ');
+            $indentation = $depth * self::INDENTATION + strlen($shortId . ': ');
             $this->io->writeln($this->createLines($indentation, $result->getMessage(), true));
         }
     }
@@ -65,11 +66,12 @@ class Printer implements PrintInterface
     function title(string $id, string $name, int $depth, string $status = 'WARNING')
     {
         $indentation = $depth * self::INDENTATION;
-        $this->io->write(map($this->createLines($indentation, $id, true), function ($id) use ($status) {
+        $shortId = substr($id, 0, 4);
+        $this->io->write(map($this->createLines($indentation, $shortId, true), function ($id) use ($status) {
             return "<${status}>" . $id . "</${status}>:";
         }));
 
-        $indentation += strlen($id . ': ');
+        $indentation += strlen($shortId . ': ');
         $this->io->writeln(map($this->createLines($indentation, $name) , function ($line) {
             return $line;
         }));
