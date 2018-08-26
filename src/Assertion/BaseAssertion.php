@@ -29,7 +29,7 @@ class BaseAssertion
 
     protected function getStatus(bool $passed)
     {
-        return $passed ? Status::PASSED : Status::FAILED;
+        return $passed ? Status::SUCCESS : Status::FAILURE;
     }
 
     protected function hasAssertionFailed(bool $passed)

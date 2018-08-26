@@ -11,7 +11,7 @@ namespace OneSpec\Cli;
 use function Functional\map;
 use OneSpec\PrintInterface;
 use OneSpec\Result\Result;
-use OneSpec\Result\Status;
+use OneSpec\Result\Title;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -32,11 +32,11 @@ class Printer implements PrintInterface
         $success = new OutputFormatterStyle('green', null, ['bold']);
         $failure = new OutputFormatterStyle('red', null, ['bold']);
         $error = new OutputFormatterStyle('magenta', null, ['bold']);
-        $comment = new OutputFormatterStyle('yellow', null, ['bold']);
-        $io->getFormatter()->setStyle('PASSED', $success);
-        $io->getFormatter()->setStyle('FAILED', $failure);
-        $io->getFormatter()->setStyle('EXCEPTION', $error);
-        $io->getFormatter()->setStyle('WARNING', $comment);
+        $warning = new OutputFormatterStyle('yellow', null, ['bold']);
+        $io->getFormatter()->setStyle('success', $success);
+        $io->getFormatter()->setStyle('failure', $failure);
+        $io->getFormatter()->setStyle('warning', $warning);
+        $io->getFormatter()->setStyle('exception', $error);
         $this->io = $io;
         $this->width = (new Terminal())->getWidth() - 2;
     }
@@ -53,26 +53,26 @@ class Printer implements PrintInterface
         return $lines;
     }
 
-    function result(string $id, string $name, Result $result, int $depth)
+    function result(Title $title, Result $result, int $depth)
     {
-        $this->title($id, $name, $depth, $result->getStatus());
-        $shortId = substr($id, 0, 4);
+        $this->title($title, $depth, $result->getStatus());
         if ($result->getStatus() !== 'PASSED') {
+            $shortId = $title->getShortId()->getValue();
             $indentation = $depth * self::INDENTATION + strlen($shortId . ': ');
             $this->io->writeln($this->createLines($indentation, $result->getMessage()->getValue(), true));
         }
     }
 
-    function title(string $id, string $name, int $depth, string $status = 'WARNING')
+    function title(Title $title, int $depth, string $status = 'WARNING')
     {
         $indentation = $depth * self::INDENTATION;
-        $shortId = substr($id, 0, 4);
+        $shortId = $title->getShortId()->getValue();
         $this->io->write(map($this->createLines($indentation, $shortId, true), function ($id) use ($status) {
-            return "<${status}>" . $id . "</${status}>:";
+            return "<${status}>" . $id . "</${status}>: ";
         }));
 
         $indentation += strlen($shortId . ': ');
-        $this->io->writeln(map($this->createLines($indentation, $name) , function ($line) {
+        $this->io->writeln(map($this->createLines($indentation, $title->getName()->getValue()) , function ($line) {
             return $line;
         }));
     }

@@ -9,9 +9,10 @@
 namespace OneSpec;
 
 use OneSpec\Result\Result;
+use OneSpec\Result\Title;
 
 interface PrintInterface
 {
-    function result(string $id, string $name, Result $result, int $depth);
-    function title(string $id, string $name, int $depth);
+    function result(Title $title, Result $result, int $depth);
+    function title(Title $title, int $depth);
 }

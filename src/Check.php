@@ -92,7 +92,7 @@ class Check
      */
     private function handleResult(Result $result)
     {
-        if ($result->getStatus() === Status::FAILED) {
+        if ($result->getStatus() === Status::FAILURE) {
             throw new AssertionFailed($result);
         }
     }

@@ -9,6 +9,7 @@ use OneSpec\Result\Color;
 use OneSpec\Result\Result;
 use OneSpec\Result\Status;
 use OneSpec\Result\Text;
+use OneSpec\Result\Title;
 
 class Spec
 {
@@ -48,7 +49,7 @@ class Spec
 
     public function test(string $name, callable $tests)
     {
-        $result = new Result(Status::PASSED, new Text('', Color::PRIMARY));
+        $result = new Result(Status::SUCCESS, new Text('', Color::PRIMARY));
 
         try {
             $this->callBeforeClosures();
@@ -89,8 +90,7 @@ class Spec
     public function printFile(PrintInterface $print, string $file = '')
     {
         $key = $this->getUniqueKey($file);
-        [$id, $file] = explode(':', $key);
-        $print->title($id, $file, 0);
+        $print->title(new Title($key, Status::NONE), 0);
         $this->printResults($print, 1);
     }
 
@@ -102,12 +102,11 @@ class Spec
     private function printResult(PrintInterface $print, int $depth)
     {
         return function ($value, $key) use ($print, $depth) {
-            [$id, $name] = explode(':', $key);
             if ($value instanceof Spec) {
-                $print->title($id, $name, $depth);
+                $print->title(new Title($key, Status::NONE), $depth);
                 $value->printResults($print, $depth + 1);
-            } else {
-                $print->result($id, $name, $value, $depth);
+            } elseif ($value instanceof Result) {
+                $print->result(new Title($key, $value->getStatus()), $value, $depth);
             }
         };
     }
@@ -152,7 +151,7 @@ class Spec
      */
     private function getUniqueKey(string $name): string
     {
-        $key = md5($name) . ": $name";
+        $key = md5($name) . ":$name";
         if (isset($this->output[$key])) {
             throw new \Exception("Tests must have different names");
         }

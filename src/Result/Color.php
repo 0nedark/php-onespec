@@ -11,10 +11,11 @@ namespace OneSpec\Result;
 
 class Color
 {
+    const NONE = 'NONE';
     const PRIMARY = 'PRIMARY';
     const SECONDARY = 'SECONDARY';
     const SUCCESS = 'SUCCESS';
     const FAILURE = 'FAILURE';
     const WARNING = 'WARNING';
-    const ERROR = 'ERROR';
+    const EXCEPTION = 'EXCEPTION';
 }
