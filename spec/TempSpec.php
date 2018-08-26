@@ -22,12 +22,12 @@ $spec->describe("asd", function(Spec $spec) {
         });
     });
 
-    $spec->test("C", function ($expect, ClassBuilder $obj) {
-        $expect($obj->getTimezone()->getName())->toBeEqualTo("UTC");
-    });
-
     $spec->test("D", function ($expect, ClassBuilder $obj) {
         $obj->setTimezone(new \DateTimeZone('ASD'));
         $expect($obj->getTimezone()->getName())->toBeEqualTo("ASD");
     });
+});
+
+$spec->test("C", function ($expect, ClassBuilder $obj) {
+    $expect($obj->getTimezone()->getName())->toBeEqualTo("UTC");
 });

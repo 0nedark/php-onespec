@@ -64,7 +64,7 @@ class RunCommand extends Command
                 $file = $this->config->buildSpecPath($folders);
 
                 $spec = null; require $file;
-                $this->outputTestResults($spec);
+                $this->outputTestResults($spec, $file);
             }
         };
     }
@@ -87,8 +87,8 @@ class RunCommand extends Command
         };
     }
 
-    private function outputTestResults(Spec $spec)
+    private function outputTestResults(Spec $spec, string $file)
     {
-        $spec->printResults($this->printer);
+        $spec->printResults($this->printer, 0, $file);
     }
 }

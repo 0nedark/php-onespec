@@ -78,15 +78,22 @@ class Spec
         $this->afterClosure = $after;
     }
 
-    public function printResults(PrintInterface $print, int $depth = 0)
+    public function printResults(PrintInterface $print, int $depth = 0, string $file = '')
     {
-        foreach ($this->output as $key => $value) {
-            [$id, $name] = explode(':', $key);
-            if ($value instanceof Spec) {
-                $print->title($id, $name, $depth);
-                $value->printResults($print, $depth + 1);
-            } else {
-                $print->result($id, $name, $value, $depth);
+        if ($depth === 0) {
+            $key = $this->getUniqueKey($file);
+            [$id, $file] = explode(':', $key);
+            $print->title($id, $file, $depth);
+            $this->printResults($print, $depth + 1);
+        } else {
+            foreach ($this->output as $key => $value) {
+                [$id, $name] = explode(':', $key);
+                if ($value instanceof Spec) {
+                    $print->title($id, $name, $depth);
+                    $value->printResults($print, $depth + 1);
+                } else {
+                    $print->result($id, $name, $value, $depth);
+                }
             }
         }
     }
