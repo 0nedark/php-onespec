@@ -89,7 +89,7 @@ class Spec
     public function printFile(PrintInterface $print, string $file = '')
     {
         $key = $this->getUniqueKey($file);
-        $print->title($this->getResultFromKey($key), 0);
+        $print->title($this->getOutputFromKey($key), 0);
         $this->printResults($print, 1);
     }
 
@@ -102,15 +102,15 @@ class Spec
     {
         return function ($value, $key) use ($print, $depth) {
             if ($value instanceof Spec) {
-                $print->title($this->getResultFromKey($key), $depth);
+                $print->title($this->getOutputFromKey($key), $depth);
                 $value->printResults($print, $depth + 1);
             } elseif ($value instanceof Output) {
-                $print->result($this->getResultFromKey($key, $value->getStatus()), $value, $depth);
+                $print->result($this->getOutputFromKey($key, $value->getStatus()), $value, $depth);
             }
         };
     }
 
-    private function getResultFromKey(string $key, string $status = Status::NONE): Output
+    private function getOutputFromKey(string $key, string $status = Status::NONE): Output
     {
         [$id, $name] = explode(':', $key);
         return new Output(
