@@ -2,17 +2,29 @@
 
 namespace OneSpec\Check;
 
+use OneSpec\Result\Result;
+
 trait Equality
 {
-    public function beEqualTo(array $arguments): array
+    public function beEqualTo(array $arguments): Result
     {
-        $passed = $this->value == $arguments[0];
-        return [$passed, "Input does not match provided value", $arguments[0], $this->value];
+        $passed = $this->hasAssertionFailed($this->value == $arguments[0]);
+        $positive = $passed ? 'get' : 'not get';
+        return new Result(
+            $this->getStatus($passed),
+            "Expected to ${positive} :expected but received :actual",
+            ["expected" => $arguments[0], $this->value]
+        );
     }
 
-    public function beIdenticalTo(array $arguments): array
+    public function beIdenticalTo(array $arguments): Result
     {
-        $passed = $this->value === $arguments[0];
-        return [$passed, "Input is not identical to provided value", $arguments[0], $this->value];
+        $passed = $this->hasAssertionFailed($this->value === $arguments[0]);
+        $positive = $passed ? 'be' : 'not be';
+        return new Result(
+            $this->getStatus($passed),
+            "Expected :expected to ${positive} identical to :actual",
+            ["expected" => $arguments[0], $this->value]
+        );
     }
 }

@@ -3,7 +3,7 @@
 namespace OneSpec;
 
 use OneSpec\Architect\ClassBuilder;
-use OneSpec\Error\AssertionException;
+use OneSpec\Error\AssertionFailed;
 use OneSpec\Result\Result;
 use OneSpec\Result\Status;
 
@@ -45,8 +45,7 @@ class Spec
 
     public function test(string $name, callable $tests)
     {
-        $result = new Result();
-
+        $result = new Result(Status::PASSED);
         try {
             $this->callBeforeClosures();
             $tests(function ($actual) {
@@ -54,17 +53,14 @@ class Spec
             }, $this->classBuilder);
             $this->callAfterClosures();
         } catch (\Exception $e) {
-            if ($e instanceof AssertionException) {
-                $result = new Result(Status::FAILED);
-                $result->setFailureDetails(
-                    $e->getMessage(),
-                    $e->getExpected(),
-                    (int)$e->isPositive(),
-                    $e->getActual()
-                );
+            if ($e instanceof AssertionFailed) {
+                $result = $e->getResult();
             } else {
-                $result = new Result(Status::ERROR);
-                $result->setErrorDetails($e->getMessage(), $e->getFile(), $e->getLine());
+                $result = new Result(
+                    Status::ERROR,
+                    'An error was thrown during the test: (:error) -> (file :file) -> (line :line)',
+                    ['error' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine()]
+                );
             }
         }
 
@@ -131,7 +127,7 @@ class Spec
     private function getUniqueKey(string $name): string
     {
         do {
-            $key = bin2hex(openssl_random_pseudo_bytes(3)) . ": $name";
+            $key = bin2hex(openssl_random_pseudo_bytes(2)) . ": $name";
         } while (property_exists($this->output, $key));
         return $key;
     }

@@ -10,7 +10,7 @@ namespace OneSpec\Result;
 
 class Status
 {
-    const PASS = 'PASS';
-    const FAILED = 'FAILURE';
+    const PASSED = 'PASSED';
+    const FAILED = 'FAILED';
     const ERROR = 'ERROR';
 }

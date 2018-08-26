@@ -2,14 +2,17 @@
 
 namespace OneSpec;
 
+use function Functional\concat;
 use OneSpec\Architect\ClassBuilder;
 use OneSpec\Assertion\BooleanAssertion;
 use OneSpec\Assertion\BaseAssertion;
 use OneSpec\Assertion\IntegerAssertion;
 use OneSpec\Assertion\ObjectAssertion;
 use OneSpec\Assertion\StringAssertion;
-use OneSpec\Error\AssertionException;
-use Prophecy\Exception\Doubler\MethodNotFoundException;
+use OneSpec\Error\AssertionFailed;
+use OneSpec\Error\InvalidAssertionMethod;
+use OneSpec\Result\Result;
+use OneSpec\Result\Status;
 
 class Check
 {
@@ -40,52 +43,57 @@ class Check
         }
     }
 
+    /**
+     * @param $name
+     * @param $arguments
+     * @throws AssertionFailed
+     * @throws InvalidAssertionMethod
+     */
     public function __call($name, $arguments)
     {
-        [$positive, $method] = $this->getTestMethod($name);
-        [
-            $passed,
-            $message,
-            $expected,
-            $actual
-        ] = $this->assertion->$method($arguments);
-
-        if ($this->hasAssertionFailed($positive, $passed)) {
-            throw new AssertionException($message, $expected, $positive, $actual);
-        }
-    }
-
-    private function getTestMethod(string $name)
-    {
         $names = preg_split('/(?=[A-Z])/', $name);
-        $this->isMethodWithoutTo($names[0], $name);
+        $this->isMethodNameValid($names[0], $name);
         $positive = $this->isMethodPositive($names[1]);
-        $assertion = array_splice($names, $positive ? 1 : 2);
-        return [$positive, implode("", $assertion)];
+        $method = concat(...array_splice($names, $positive ? 1 : 2));
+
+        $result = $this->assertion
+            ->setPositive($positive)
+            ->$method($arguments);
+        $this->handleResult($result);
     }
 
-    private function isMethodWithoutTo(string $word, string $method)
+    /**
+     * @param string $word
+     * @param string $method
+     * @throws InvalidAssertionMethod
+     */
+    private function isMethodNameValid(string $word, string $method)
     {
         if ($word !== "to") {
-            throw new MethodNotFoundException(
-                "Assertion should start with 'to'",
-                get_class($this->assertion),
-                $method
+            throw new InvalidAssertionMethod(
+                "Assertion should start with 'to', attempted to call ${method} on " . get_class($this->assertion)
             );
         }
     }
 
     private function isMethodPositive(string $word)
     {
-        $negate = false;
+        $positive = true;
         if ($word === "Not") {
-            $negate = true;
+            $positive = false;
         }
 
-        return !$negate;
+        return $positive;
     }
 
-    private function hasAssertionFailed($positive, $passed) {
-        return ($positive && !$passed) || (!$positive && $passed);
+    /**
+     * @param Result $result
+     * @throws AssertionFailed
+     */
+    private function handleResult(Result $result)
+    {
+        if ($result->getStatus() === Status::FAILED) {
+            throw new AssertionFailed($result);
+        }
     }
 }

@@ -8,41 +8,36 @@
 
 namespace OneSpec\Result;
 
-class Result
+use Traversable;
+
+class Result implements \IteratorAggregate, Binding
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $status;
-    /** @var string */
+    /**
+     * @var string
+     */
     private $message;
-    /** @var string */
-    private $expected;
-    /** @var int */
-    private $positive;
-    /** @var string */
-    private $actual;
-    /** @var string */
-    private $file;
-    /** @var int */
-    private $line;
+    /**
+     * @var string[]
+     */
+    private $bindings;
 
-    public function __construct(string $status = Status::PASS)
+    /**
+     * Result constructor.
+     *
+     * @param string $status
+     * @param string $message
+     * @param string[] $bindings
+     */
+    public function __construct(string $status, string $message = '', array $bindings = [])
     {
+
         $this->status = $status;
-    }
-
-    public function setFailureDetails(string $message, string $expected, int $positive, string $actual)
-    {
         $this->message = $message;
-        $this->expected = $expected;
-        $this->positive = $positive;
-        $this->actual = $actual;
-    }
-
-    public function setErrorDetails(string $message, string $file, int $line)
-    {
-        $this->message = $message;
-        $this->file = $file;
-        $this->line = $line;
+        $this->bindings = $bindings;
     }
 
     /**
@@ -62,42 +57,14 @@ class Result
     }
 
     /**
-     * @return string
+     * Retrieve an external iterator
+     * @link https://php.net/manual/en/iteratoraggregate.getiterator.php
+     * @return Traversable An instance of an object implementing <b>Iterator</b> or
+     * <b>Traversable</b>
+     * @since 5.0.0
      */
-    public function getFile(): string
+    public function getIterator()
     {
-        return $this->file;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLine(): int
-    {
-        return $this->line;
-    }
-
-    /**
-     * @return string
-     */
-    public function getExpected(): string
-    {
-        return $this->expected;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPositive(): int
-    {
-        return $this->positive;
-    }
-
-    /**
-     * @return string
-     */
-    public function getActual(): string
-    {
-        return $this->actual;
+        return new \ArrayIterator($this->bindings);
     }
 }

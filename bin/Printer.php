@@ -33,8 +33,8 @@ class Printer implements PrintInterface
         $failure = new OutputFormatterStyle('red', null, ['bold']);
         $error = new OutputFormatterStyle('magenta', null, ['bold']);
         $comment = new OutputFormatterStyle('yellow', null, ['bold']);
-        $io->getFormatter()->setStyle('PASS', $success);
-        $io->getFormatter()->setStyle('FAILURE', $failure);
+        $io->getFormatter()->setStyle('PASSED', $success);
+        $io->getFormatter()->setStyle('FAILED', $failure);
         $io->getFormatter()->setStyle('ERROR', $error);
         $io->getFormatter()->setStyle('WARNING', $comment);
         $this->io = $io;
@@ -56,27 +56,9 @@ class Printer implements PrintInterface
     function result(string $id, string $name, Result $result, int $depth)
     {
         $this->title($id, $name, $depth, $result->getStatus());
-        $indentation = $depth * self::INDENTATION + strlen($id . ': ');
-
-        switch ($result->getStatus()) {
-            case Status::FAILED:
-                $message = $result->getMessage();
-                $this->io->writeln($this->createLines($indentation, $message, true));
-                $expected = $result->getExpected();
-                $actual = $result->getActual();
-                if ($result->getPositive()) {
-                    $message = "Expected to get <pass>${expected}</pass> but received <failure>${actual}</failure>";
-                    $this->io->writeln($this->createLines($indentation + 2, $message, true));
-                } else {
-                    $message = "Expected to not get <pass>${expected}</pass> but received <failure>${actual}</failure>";
-                    $this->io->writeln($this->createLines($indentation + 2, $message, true));
-                }
-
-                break;
-            case Status::ERROR:
-                $message = 'An error was thrown during a test -> ' . $result->getMessage() . ', in file ' . $result->getFile() . ' on line ' . $result->getLine();
-                $this->io->writeln($this->createLines($indentation, $message, true));
-                break;
+        if ($result->getStatus() !== 'PASSED') {
+            $indentation = $depth * self::INDENTATION + strlen($id . ': ');
+            $this->io->writeln($this->createLines($indentation, $result->getMessage(), true));
         }
     }
 
