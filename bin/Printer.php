@@ -59,7 +59,7 @@ class Printer implements PrintInterface
         $shortId = substr($id, 0, 4);
         if ($result->getStatus() !== 'PASSED') {
             $indentation = $depth * self::INDENTATION + strlen($shortId . ': ');
-            $this->io->writeln($this->createLines($indentation, $result->getMessage(), true));
+            $this->io->writeln($this->createLines($indentation, $result->getMessage()->getValue(), true));
         }
     }
 

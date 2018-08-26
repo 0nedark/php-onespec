@@ -89,6 +89,6 @@ class RunCommand extends Command
 
     private function outputTestResults(Spec $spec, string $file)
     {
-        $spec->printResults($this->printer, 0, $file);
+        $spec->printFile($this->printer, $file);
     }
 }

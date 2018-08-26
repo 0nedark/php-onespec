@@ -2,10 +2,13 @@
 
 namespace OneSpec;
 
+use function Functional\each;
 use OneSpec\Architect\ClassBuilder;
 use OneSpec\Error\AssertionFailed;
+use OneSpec\Result\Color;
 use OneSpec\Result\Result;
 use OneSpec\Result\Status;
+use OneSpec\Result\Text;
 
 class Spec
 {
@@ -26,7 +29,7 @@ class Spec
         $this->prevAfterClosures = $after;
         $this->beforeClosure = function () {};
         $this->afterClosure = function () {};
-        $this->output = (object)[];
+        $this->output = [];
     }
 
     public function describe(string $name, callable $describe)
@@ -40,12 +43,13 @@ class Spec
         $describe($spec);
 
         $key = $this->getUniqueKey($name);
-        $this->output->$key = $spec;
+        $this->output[$key] = $spec;
     }
 
     public function test(string $name, callable $tests)
     {
-        $result = new Result(Status::PASSED);
+        $result = new Result(Status::PASSED, new Text('', Color::PRIMARY));
+
         try {
             $this->callBeforeClosures();
             $tests(function ($actual) {
@@ -58,14 +62,18 @@ class Spec
             } else {
                 $result = new Result(
                     Status::EXCEPTION,
-                    'An error was thrown during the test: (:error) -> (file :file) -> (line :line)',
-                    ['error' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine()]
+                    new Text('An error was thrown during the test: (:error) -> (file :file) -> (line :line)', Color::PRIMARY),
+                    [
+                        'error' => new Text($e->getMessage(), Color::PRIMARY),
+                        'file' => new Text($e->getFile(), Color::PRIMARY),
+                        'line' => new Text($e->getLine(), Color::PRIMARY),
+                    ]
                 );
             }
         }
 
         $key = $this->getUniqueKey($name);
-        $this->output->$key = $result;
+        $this->output[$key] = $result;
     }
 
     public function before(callable $before)
@@ -78,24 +86,30 @@ class Spec
         $this->afterClosure = $after;
     }
 
-    public function printResults(PrintInterface $print, int $depth = 0, string $file = '')
+    public function printFile(PrintInterface $print, string $file = '')
     {
-        if ($depth === 0) {
-            $key = $this->getUniqueKey($file);
-            [$id, $file] = explode(':', $key);
-            $print->title($id, $file, $depth);
-            $this->printResults($print, $depth + 1);
-        } else {
-            foreach ($this->output as $key => $value) {
-                [$id, $name] = explode(':', $key);
-                if ($value instanceof Spec) {
-                    $print->title($id, $name, $depth);
-                    $value->printResults($print, $depth + 1);
-                } else {
-                    $print->result($id, $name, $value, $depth);
-                }
+        $key = $this->getUniqueKey($file);
+        [$id, $file] = explode(':', $key);
+        $print->title($id, $file, 0);
+        $this->printResults($print, 1);
+    }
+
+    private function printResults(PrintInterface $print, int $depth)
+    {
+        each((array)$this->output, $this->printResult($print, $depth));
+    }
+
+    private function printResult(PrintInterface $print, int $depth)
+    {
+        return function ($value, $key) use ($print, $depth) {
+            [$id, $name] = explode(':', $key);
+            if ($value instanceof Spec) {
+                $print->title($id, $name, $depth);
+                $value->printResults($print, $depth + 1);
+            } else {
+                $print->result($id, $name, $value, $depth);
             }
-        }
+        };
     }
 
     private function getBeforeClosures(): array
@@ -139,7 +153,7 @@ class Spec
     private function getUniqueKey(string $name): string
     {
         $key = md5($name) . ": $name";
-        if (property_exists($this->output, $key)) {
+        if (isset($this->output[$key])) {
             throw new \Exception("Tests must have different names");
         }
 

@@ -2,7 +2,9 @@
 
 namespace OneSpec\Check;
 
+use OneSpec\Result\Color;
 use OneSpec\Result\Result;
+use OneSpec\Result\Text;
 
 trait Equality
 {
@@ -12,8 +14,11 @@ trait Equality
         $positive = $this->positive ? 'get' : 'not get';
         return new Result(
             $this->getStatus($passed),
-            "Expected to ${positive} :expected but received :actual",
-            ["expected" => $arguments[0], $this->value]
+            new Text("Expected to ${positive} :expected but received :actual", Color::PRIMARY),
+            [
+                "expected" => new Text($arguments[0], Color::SUCCESS),
+                "actual" => new Text($this->value, Color::FAILURE),
+            ]
         );
     }
 
@@ -23,8 +28,11 @@ trait Equality
         $positive = $this->positive ? 'be' : 'not be';
         return new Result(
             $this->getStatus($passed),
-            "Expected :expected to ${positive} identical to :actual",
-            ["expected" => $arguments[0], $this->value]
+            new Text("Expected :expected to ${positive} identical to :actual", Color::PRIMARY),
+            [
+                "expected" => new Text($arguments[0], Color::SUCCESS),
+                "actual" => new Text($this->value, Color::FAILURE)
+            ]
         );
     }
 }

@@ -8,6 +8,7 @@
 
 namespace OneSpec\Result;
 
+use Symfony\Component\Console\Terminal;
 use Traversable;
 
 class Result implements \IteratorAggregate, Binding
@@ -29,14 +30,13 @@ class Result implements \IteratorAggregate, Binding
      * Result constructor.
      *
      * @param string $status
-     * @param string $message
-     * @param string[] $bindings
+     * @param Text|null $message
+     * @param Text[] $bindings
      */
-    public function __construct(string $status, string $message = '', array $bindings = [])
+    public function __construct(string $status, ?Text $message, array $bindings = [])
     {
-
         $this->status = $status;
-        $this->message = $message;
+        $this->message = isset($message) ? $message : new Text('', Color::PRIMARY);
         $this->bindings = $bindings;
     }
 
@@ -49,9 +49,9 @@ class Result implements \IteratorAggregate, Binding
     }
 
     /**
-     * @return string
+     * @return Text
      */
-    public function getMessage(): string
+    public function getMessage(): Text
     {
         return $this->message;
     }
