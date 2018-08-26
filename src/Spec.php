@@ -95,7 +95,7 @@ class Spec
 
     private function printResults(PrintInterface $print, int $depth)
     {
-        each((array)$this->output, $this->printResult($print, $depth));
+        each($this->output, $this->printResult($print, $depth));
     }
 
     private function printResult(PrintInterface $print, int $depth)
