@@ -9,7 +9,7 @@ trait Equality
     public function beEqualTo(array $arguments): Result
     {
         $passed = $this->hasAssertionFailed($this->value == $arguments[0]);
-        $positive = $passed ? 'get' : 'not get';
+        $positive = $this->positive ? 'get' : 'not get';
         return new Result(
             $this->getStatus($passed),
             "Expected to ${positive} :expected but received :actual",
@@ -20,7 +20,7 @@ trait Equality
     public function beIdenticalTo(array $arguments): Result
     {
         $passed = $this->hasAssertionFailed($this->value === $arguments[0]);
-        $positive = $passed ? 'be' : 'not be';
+        $positive = $this->positive ? 'be' : 'not be';
         return new Result(
             $this->getStatus($passed),
             "Expected :expected to ${positive} identical to :actual",
