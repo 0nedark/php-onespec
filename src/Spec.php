@@ -87,8 +87,8 @@ class Spec
                 $print->title($this->getOutputFromKey($key), $depth);
                 $value->printResults($print, $depth + 1);
             } elseif (is_callable($value)) {
-                $result = $this->runTest($value);
-                $print->result($this->getOutputFromKey($key, $result->getStatus()), $result, $depth);
+                $output = $this->runTest($value);
+                $print->result($this->getOutputFromKey($key, $output->getStatus()), $output, $depth);
             }
         };
     }
@@ -99,11 +99,14 @@ class Spec
             $test();
         } catch (\Exception $e) {
             if ($e instanceof AssertionFailed) {
-                return $e->getResult();
+                return $e->getOutput();
             } else {
                 return new Output(
                     Status::EXCEPTION,
-                    new Text('An error was thrown during the test: :error in file :file on line :line', Color::PRIMARY),
+                    new Text(
+                        'An error was thrown during the test: :error in file :file on line :line',
+                        Color::PRIMARY
+                    ),
                     [
                         'error' => new Text($e->getMessage(), Color::EXCEPTION),
                         'file' => new Text($e->getFile(), Color::EXCEPTION),
@@ -121,7 +124,7 @@ class Spec
         [$id, $name] = explode(':', $key);
         return new Output(
             $status,
-            new Text(":id : {$name}", Color::PRIMARY),
+            new Text(":id {$name}", Color::PRIMARY),
             ['id' => new Text("$id", $status, ['KEY'])]
         );
     }

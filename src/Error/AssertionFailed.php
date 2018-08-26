@@ -21,7 +21,7 @@ class AssertionFailed extends \Exception
     /**
      * @return Output
      */
-    public function getResult(): Output
+    public function getOutput(): Output
     {
         return $this->result;
     }
