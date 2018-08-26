@@ -48,32 +48,14 @@ class Spec
 
     public function it(string $name, callable $tests)
     {
-        $result = new Output(Status::SUCCESS, new Text('', Color::PRIMARY));
-
-        try {
+        $key = $this->getUniqueKey('it ' . $name);
+        $this->output[$key] = function () use ($tests) {
             $this->callBeforeClosures();
             $tests(function ($actual) {
                 return new Check($actual);
             }, $this->classBuilder);
             $this->callAfterClosures();
-        } catch (\Exception $e) {
-            if ($e instanceof AssertionFailed) {
-                $result = $e->getResult();
-            } else {
-                $result = new Output(
-                    Status::EXCEPTION,
-                    new Text('An error was thrown during the test: :error in file :file on line :line', Color::PRIMARY),
-                    [
-                        'error' => new Text($e->getMessage(), Color::EXCEPTION),
-                        'file' => new Text($e->getFile(), Color::EXCEPTION),
-                        'line' => new Text($e->getLine(), Color::EXCEPTION),
-                    ]
-                );
-            }
-        }
-
-        $key = $this->getUniqueKey('it ' . $name);
-        $this->output[$key] = $result;
+        };
     }
 
     public function before(callable $before)
@@ -104,10 +86,34 @@ class Spec
             if ($value instanceof Spec) {
                 $print->title($this->getOutputFromKey($key), $depth);
                 $value->printResults($print, $depth + 1);
-            } elseif ($value instanceof Output) {
-                $print->result($this->getOutputFromKey($key, $value->getStatus()), $value, $depth);
+            } elseif (is_callable($value)) {
+                $result = $this->runTest($value);
+                $print->result($this->getOutputFromKey($key, $result->getStatus()), $result, $depth);
             }
         };
+    }
+
+    private function runTest(callable $test): Output
+    {
+        try {
+            $test();
+        } catch (\Exception $e) {
+            if ($e instanceof AssertionFailed) {
+                return $e->getResult();
+            } else {
+                return new Output(
+                    Status::EXCEPTION,
+                    new Text('An error was thrown during the test: :error in file :file on line :line', Color::PRIMARY),
+                    [
+                        'error' => new Text($e->getMessage(), Color::EXCEPTION),
+                        'file' => new Text($e->getFile(), Color::EXCEPTION),
+                        'line' => new Text($e->getLine(), Color::EXCEPTION),
+                    ]
+                );
+            }
+        }
+
+        return new Output(Status::SUCCESS, new Text('', Color::PRIMARY));
     }
 
     private function getOutputFromKey(string $key, string $status = Status::WARNING): Output
