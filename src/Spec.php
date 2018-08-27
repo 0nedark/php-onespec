@@ -3,6 +3,9 @@
 namespace OneSpec;
 
 use function Functional\each;
+use function Functional\flatten;
+use function Functional\map;
+use function Functional\reduce_left;
 use OneSpec\Architect\ClassBuilder;
 use OneSpec\Error\AssertionFailed;
 use OneSpec\Result\Color;
@@ -68,27 +71,58 @@ class Spec
         $this->afterClosure = $after;
     }
 
-    public function printFile(PrintInterface $print, string $file = '')
+    public function runSpecificTest(PrintInterface $print, string $file, string $id): bool
+    {
+        $key = $this->getUniqueKey($file);
+        $output = $this->getOutputFromKey($key);
+        $hash = $output->getBinding('id')->getDecoratedValue();
+
+        if ($hash === $id || $this->findTestInSpec($id)) {
+            $this->runSpecInFile($print, $file);
+            return true;
+        }
+
+        return false;
+    }
+
+    public function runSpecInFile(PrintInterface $print, string $file = '')
     {
         $key = $this->getUniqueKey($file);
         $print->title($this->getOutputFromKey($key), 0);
-        $this->printResults($print, 1);
+        $this->runTestsInSpec($print, 1);
     }
 
-    private function printResults(PrintInterface $print, int $depth)
+    private function findTestInSpec(string $id): bool
     {
-        each($this->output, $this->printResult($print, $depth));
+        $found = false;
+        foreach ($this->output as $key => $value) {
+            $output = $this->getOutputFromKey($key);
+            $hash = $output->getBinding('id')->getDecoratedValue();
+            if ($hash === $id || ($value instanceof Spec && $value->findTestInSpec($id))) {
+                $this->output = [$key => $value];
+                $found = true;
+                break;
+            }
+        }
+
+        return $found;
     }
 
-    private function printResult(PrintInterface $print, int $depth)
+    private function runTestsInSpec(PrintInterface $print, int $depth)
+    {
+        each($this->output, $this->runEntityOfASpec($print, $depth));
+    }
+
+    private function runEntityOfASpec(PrintInterface $print, int $depth)
     {
         return function ($value, $key) use ($print, $depth) {
             if ($value instanceof Spec) {
                 $print->title($this->getOutputFromKey($key), $depth);
-                $value->printResults($print, $depth + 1);
+                $value->runTestsInSpec($print, $depth + 1);
             } elseif (is_callable($value)) {
                 $output = $this->runTest($value);
-                $print->result($this->getOutputFromKey($key, $output->getStatus()), $output, $depth);
+                $title = $this->getOutputFromKey($key, $output->getStatus());
+                $print->result($title, $output, $depth);
             }
         };
     }

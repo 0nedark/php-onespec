@@ -16,6 +16,7 @@ use OneSpec\Cli\Config;
 use OneSpec\Cli\Printer;
 use OneSpec\Spec;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -26,7 +27,12 @@ class RunCommand extends Command
      * @var Config
      */
     private $config;
+    /**
+     * @var SymfonyStyle
+     */
+    private $io;
     private $printer;
+    private $hash;
 
     public function __construct(string $name = null)
     {
@@ -38,12 +44,15 @@ class RunCommand extends Command
     {
         $this->setName('run')
             ->setDescription('Runs tests')
-            ->setHelp('This command will execute all your spec tests...');
+            ->setHelp('This command will execute all your spec tests...')
+            ->addArgument('hash', InputArgument::OPTIONAL, 'The hash of a specific test or block');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->printer = new Printer(new SymfonyStyle($input, $output));
+        $this->hash = $input->getArgument('hash');
+        $this->io = new SymfonyStyle($input, $output);
+        $this->printer = new Printer($this->io);
         $this->runTests('./spec');
     }
 
@@ -89,6 +98,12 @@ class RunCommand extends Command
 
     private function outputTestResults(Spec $spec, string $file)
     {
-        $spec->printFile($this->printer, $file);
+        if (isset($this->hash)) {
+            if ($spec->runSpecificTest($this->printer, $file, $this->hash)) {
+                exit(0);
+            }
+        } else {
+            $spec->runSpecInFile($this->printer, $file);
+        }
     }
 }
