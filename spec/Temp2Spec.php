@@ -12,6 +12,6 @@ $spec->before(function (ClassBuilder $obj) {
 
 $spec->describe("some A", function(Spec $spec) {
     $spec->it("aasd ad w f naskjd askn kfkl abf askna snaskd naskd lkajsdn kasnd kafk as nad nakfn alkf akls dnaksdn and kasjd kjaaksdn klasdb klasd kasbdj absdjab kajsbd jasuay dbuad uayvdauysdvquwqu vfuavsd vasd vasd uadv quydvsav kasdv uydwv uasvd hasvd uyv uasvd asvd vuwqdv aksdv uqv", function ($expect, ClassBuilder $obj) {
-        $expect($obj->getTimezone()->getName())->toBeEqualTo("UTC");
+        $expect(['test' => 1])->toHaveKeyValue('test', true);
     });
 });

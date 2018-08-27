@@ -4,8 +4,10 @@ namespace OneSpec;
 
 use function Functional\concat;
 use OneSpec\Architect\ClassBuilder;
+use OneSpec\Assertions\ArrayAssertion;
 use OneSpec\Assertions\BooleanAssertion;
 use OneSpec\Assertions\BaseAssertion;
+use OneSpec\Assertions\CallableAssertion;
 use OneSpec\Assertions\IntegerAssertion;
 use OneSpec\Assertions\ObjectAssertion;
 use OneSpec\Assertions\StringAssertion;
@@ -14,7 +16,7 @@ use OneSpec\Errors\InvalidAssertionMethod;
 use OneSpec\Result\Output;
 use OneSpec\Result\Status;
 
-class Check
+class Assert
 {
     private $assertion;
     private $value;
@@ -33,9 +35,9 @@ class Check
         } elseif (is_numeric($value)) {
             $this->assertion = new IntegerAssertion($value);
         } elseif (is_array($value)) {
-
+            $this->assertion = new ArrayAssertion($value);
         } elseif (is_callable($value)) {
-
+            $this->assertion = new CallableAssertion($value);
         } elseif (is_object($value)) {
             $this->assertion = new ObjectAssertion($value);
         } else {

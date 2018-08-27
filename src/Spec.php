@@ -60,7 +60,7 @@ class Spec
             function () use ($tests) {
                 $this->callBeforeClosures();
                 $tests(function ($actual) {
-                    return new Check($actual);
+                    return new Assert($actual);
                 }, $this->classBuilder);
                 $this->callAfterClosures();
             }
