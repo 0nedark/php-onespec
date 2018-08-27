@@ -102,11 +102,11 @@ class Printer implements PrintInterface
             }
 
             $space = ' ';
-            $left = '  ' . str_repeat($space, $tabs);
+            $left = '❖ ' . str_repeat($space, $tabs);
 
             if ($i == 0 && isset($icon)) {
                 $space = '-';
-                $left = '--' . str_repeat($space, $tabs);
+                $left = '❖-' . str_repeat($space, $tabs);
             }
 
             if ($i == 0 && isset($icon) && $icon->getColor() !== Color::NONE) {

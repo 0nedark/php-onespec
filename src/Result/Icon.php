@@ -24,7 +24,7 @@ class Icon extends Text
                 $icon = '✱';
                 break;
             case Status::WARNING:
-                $icon = '❗';
+                $icon = '‼';
                 break;
             default:
                 $icon = '-';
