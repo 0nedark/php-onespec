@@ -8,11 +8,13 @@
 
 namespace OneSpec\Assertions;
 
+use OneSpec\Predicates\Collection;
 use OneSpec\Predicates\Map;
 
 class ArrayAssertion extends BaseAssertion
 {
     use Map;
+    use Collection;
 
     public function __construct(array $value)
     {
