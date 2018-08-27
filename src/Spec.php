@@ -4,7 +4,7 @@ namespace OneSpec;
 
 use function Functional\each;
 use OneSpec\Architect\ClassBuilder;
-use OneSpec\Errors\AssertionFailed;
+use OneSpec\Exceptions\AssertionFailed;
 use OneSpec\Result\Color;
 use OneSpec\Result\Icon;
 use OneSpec\Result\Output;

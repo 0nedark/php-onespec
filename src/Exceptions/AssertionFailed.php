@@ -1,6 +1,6 @@
 <?php
 
-namespace OneSpec\Errors;
+namespace OneSpec\Exceptions;
 
 use OneSpec\Result\Output;
 

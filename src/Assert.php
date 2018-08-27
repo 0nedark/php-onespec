@@ -11,8 +11,8 @@ use OneSpec\Assertions\CallableAssertion;
 use OneSpec\Assertions\IntegerAssertion;
 use OneSpec\Assertions\ObjectAssertion;
 use OneSpec\Assertions\StringAssertion;
-use OneSpec\Errors\AssertionFailed;
-use OneSpec\Errors\InvalidAssertionMethod;
+use OneSpec\Exceptions\AssertionFailed;
+use OneSpec\Exceptions\InvalidAssertionMethod;
 use OneSpec\Result\Output;
 use OneSpec\Result\Status;
 
