@@ -28,6 +28,10 @@ class RunCommand extends Command
      */
     private $config;
     /**
+     * @var Spec[]
+     */
+    private $specs = [];
+    /**
      * @var SymfonyStyle
      */
     private $io;
@@ -53,28 +57,28 @@ class RunCommand extends Command
         $this->hash = $input->getArgument('hash');
         $this->io = new SymfonyStyle($input, $output);
         $this->printer = new Printer($this->io);
-        $this->runTests('./spec');
+        $this->findTests('./spec');
+        $this->runTests();
     }
 
-    private function runTests(string $dir, array $folders = [])
+    private function findTests(string $dir, array $folders = [])
     {
         $directories = map(new DirectoryIterator($dir), $this->toDirectory());
         $validDirectories = filter($directories, $this->validateDirectory());
-        each($validDirectories, $this->runTest($folders));
+        each($validDirectories, $this->loadTest($folders));
     }
 
-    private function runTest(array $folders): callable {
+    private function loadTest(array $folders): callable {
         return function ($fileInfo) use ($folders) {
             if ($fileInfo->isDirectory) {
                 $folders[] = $fileInfo->getFileName;
-                $this->runTests($fileInfo->getPathName, $folders);
+                $this->findTests($fileInfo->getPathName, $folders);
             } elseif ($fileInfo->isSpec) {
                 $folders[] = $fileInfo->getFileName;
                 $file = $this->config->buildSpecPath($folders);
 
-                global $testPath; $testPath = $file;
                 $spec = null; require $file;
-                $this->outputTestResults($spec);
+                $this->specs[] = $spec;
             }
         };
     }
@@ -97,14 +101,16 @@ class RunCommand extends Command
         };
     }
 
-    private function outputTestResults(Spec $spec)
+    private function runTests()
     {
-        if (isset($this->hash)) {
-            if ($spec->runSpecificTest($this->printer, $this->hash)) {
-                exit(0);
+        foreach ($this->specs as $spec) {
+            if (isset($this->hash)) {
+                if ($spec->runSpecificTest($this->printer, $this->hash)) {
+                    exit(0);
+                }
+            } else {
+                $spec->runSpecInFile($this->printer);
             }
-        } else {
-            $spec->runSpecInFile($this->printer);
         }
     }
 }

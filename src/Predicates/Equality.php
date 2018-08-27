@@ -1,6 +1,6 @@
 <?php
 
-namespace OneSpec\Check;
+namespace OneSpec\Predicates;
 
 use OneSpec\Result\Color;
 use OneSpec\Result\Output;

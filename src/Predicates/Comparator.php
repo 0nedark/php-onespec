@@ -1,6 +1,6 @@
 <?php
 
-namespace OneSpec\Check;
+namespace OneSpec\Predicates;
 
 trait Comparator
 {

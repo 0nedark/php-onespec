@@ -4,13 +4,13 @@ namespace OneSpec;
 
 use function Functional\concat;
 use OneSpec\Architect\ClassBuilder;
-use OneSpec\Assertion\BooleanAssertion;
-use OneSpec\Assertion\BaseAssertion;
-use OneSpec\Assertion\IntegerAssertion;
-use OneSpec\Assertion\ObjectAssertion;
-use OneSpec\Assertion\StringAssertion;
-use OneSpec\Error\AssertionFailed;
-use OneSpec\Error\InvalidAssertionMethod;
+use OneSpec\Assertions\BooleanAssertion;
+use OneSpec\Assertions\BaseAssertion;
+use OneSpec\Assertions\IntegerAssertion;
+use OneSpec\Assertions\ObjectAssertion;
+use OneSpec\Assertions\StringAssertion;
+use OneSpec\Errors\AssertionFailed;
+use OneSpec\Errors\InvalidAssertionMethod;
 use OneSpec\Result\Output;
 use OneSpec\Result\Status;
 
@@ -70,9 +70,8 @@ class Check
     private function isMethodNameValid(string $word, string $method)
     {
         if ($word !== "to") {
-            throw new InvalidAssertionMethod(
-                "Assertion should start with 'to', attempted to call ${method} on " . get_class($this->assertion)
-            );
+            $message = "Assertion ${method} not found on " . get_class($this->assertion);
+            throw new InvalidAssertionMethod($message);
         }
     }
 

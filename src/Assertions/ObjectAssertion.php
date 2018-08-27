@@ -1,6 +1,6 @@
 <?php
 
-namespace OneSpec\Assertion;
+namespace OneSpec\Assertions;
 
 class ObjectAssertion extends BaseAssertion
 {

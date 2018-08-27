@@ -1,8 +1,8 @@
 <?php
 
-namespace OneSpec\Assertion;
+namespace OneSpec\Assertions;
 
-use OneSpec\Check\Equality;
+use OneSpec\Predicates\Equality;
 use OneSpec\Result\Status;
 
 class BaseAssertion

@@ -24,7 +24,7 @@ $spec->describe("aasd ad w f naskjd askn kfkl abf askna snaskd naskd lkajsdn kas
     });
 
     $spec->it("should have a UTC timezone", function ($expect, ClassBuilder $obj) {
-        $expect($obj->getTimezone()->getName())->toBeEqualTo("UTC");
+        $expect($obj->getTimezone()->getName())->BeEqualTo("UTC");
     });
 });
 
