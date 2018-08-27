@@ -6,14 +6,14 @@
  * Time: 10:42
  */
 
-namespace OneSpec\Cli\Commands;
+namespace OneSpec\Commands;
 
 use DirectoryIterator;
 use function Functional\map;
 use function Functional\each;
 use function Functional\filter;
-use OneSpec\Cli\Config;
-use OneSpec\Cli\Printer;
+use OneSpec\Config;
+use OneSpec\Printer;
 use OneSpec\Spec;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -9,6 +9,7 @@
             "email": "dovydas.rupsys@outlook.com"
         }
     ],
+    "bin": ["bin/onespec.php"],
     "require": {
         "lstrojny/functional-php": "^1.8",
         "symfony/console": "^4.1",
@@ -17,8 +18,7 @@
     "require-dev": {},
     "autoload": {
         "psr-4": {
-            "OneSpec\\": "src/",
-            "OneSpec\\Cli\\": "bin/"
+            "OneSpec\\": "src/"
         }
     }
 }

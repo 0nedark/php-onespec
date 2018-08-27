@@ -6,9 +6,9 @@
  * Time: 10:42
  */
 
-namespace OneSpec\Cli\Commands;
+namespace OneSpec\Commands;
 
-use OneSpec\Cli\Config;
+use OneSpec\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

@@ -6,7 +6,7 @@
  * Time: 11:23
  */
 
-namespace OneSpec\Cli;
+namespace OneSpec;
 
 use function Functional\concat;
 use function Functional\intersperse;

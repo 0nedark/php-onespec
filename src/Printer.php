@@ -6,11 +6,10 @@
  * Time: 15:30
  */
 
-namespace OneSpec\Cli;
+namespace OneSpec;
 
 use function Functional\each;
 use function Functional\reduce_left;
-use OneSpec\PrintInterface;
 use OneSpec\Result\Color;
 use OneSpec\Result\Icon;
 use OneSpec\Result\Output;
