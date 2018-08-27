@@ -72,8 +72,9 @@ class RunCommand extends Command
                 $folders[] = $fileInfo->getFileName;
                 $file = $this->config->buildSpecPath($folders);
 
+                global $testPath; $testPath = $file;
                 $spec = null; require $file;
-                $this->outputTestResults($spec, $file);
+                $this->outputTestResults($spec);
             }
         };
     }
@@ -96,14 +97,14 @@ class RunCommand extends Command
         };
     }
 
-    private function outputTestResults(Spec $spec, string $file)
+    private function outputTestResults(Spec $spec)
     {
         if (isset($this->hash)) {
-            if ($spec->runSpecificTest($this->printer, $file, $this->hash)) {
+            if ($spec->runSpecificTest($this->printer, $this->hash)) {
                 exit(0);
             }
         } else {
-            $spec->runSpecInFile($this->printer, $file);
+            $spec->runSpecInFile($this->printer);
         }
     }
 }

@@ -3,9 +3,6 @@
 namespace OneSpec;
 
 use function Functional\each;
-use function Functional\flatten;
-use function Functional\map;
-use function Functional\reduce_left;
 use OneSpec\Architect\ClassBuilder;
 use OneSpec\Error\AssertionFailed;
 use OneSpec\Result\Color;
@@ -15,6 +12,8 @@ use OneSpec\Result\Text;
 
 class Spec
 {
+    private static $keys = [];
+    private $name;
     private $classBuilder;
     private $prevBeforeClosures;
     private $prevAfterClosures;
@@ -23,10 +22,12 @@ class Spec
     private $output;
 
     private function __construct(
+        string $name,
         ClassBuilder $classBuilder,
         array $before = [],
         array $after = []
     ) {
+        $this->name = $name;
         $this->classBuilder = $classBuilder;
         $this->prevBeforeClosures = $before;
         $this->prevAfterClosures = $after;
@@ -35,30 +36,34 @@ class Spec
         $this->output = [];
     }
 
-    public function describe(string $name, callable $describe)
+    public function describe(string $title, callable $describe)
     {
-        $spec = new Spec(
+        $name = 'describe ' . $title;
+        $key = self::getUniqueKey($name);
+        $this->output[$key] = new Spec(
+            $name,
             $this->classBuilder,
             $this->getBeforeClosures(),
             $this->getAfterClosures()
         );
 
-        $describe($spec);
-
-        $key = $this->getUniqueKey('describe ' . $name);
-        $this->output[$key] = $spec;
+        $describe($this->output[$key]);
     }
 
     public function it(string $name, callable $tests)
     {
-        $key = $this->getUniqueKey('it ' . $name);
-        $this->output[$key] = function () use ($tests) {
-            $this->callBeforeClosures();
-            $tests(function ($actual) {
-                return new Check($actual);
-            }, $this->classBuilder);
-            $this->callAfterClosures();
-        };
+        $name = 'it ' . $name;
+        $key = self::getUniqueKey($name);
+        $this->output[$key] = new It(
+            $name,
+            function () use ($tests) {
+                $this->callBeforeClosures();
+                $tests(function ($actual) {
+                    return new Check($actual);
+                }, $this->classBuilder);
+                $this->callAfterClosures();
+            }
+        );
     }
 
     public function before(callable $before)
@@ -71,24 +76,22 @@ class Spec
         $this->afterClosure = $after;
     }
 
-    public function runSpecificTest(PrintInterface $print, string $file, string $id): bool
+    public function runSpecificTest(PrintInterface $print, string $id): bool
     {
-        $key = $this->getUniqueKey($file);
-        $output = $this->getOutputFromKey($key);
-        $hash = $output->getBinding('id')->getDecoratedValue();
-
-        if ($hash === $id || $this->findTestInSpec($id)) {
-            $this->runSpecInFile($print, $file);
+        $key = self::getKey($this->name);
+        $contains = strpos($key, $id) !== false || $this->name === $id;
+        if ($contains || $this->findTestInSpec($id)) {
+            $this->runSpecInFile($print);
             return true;
         }
 
         return false;
     }
 
-    public function runSpecInFile(PrintInterface $print, string $file = '')
+    public function runSpecInFile(PrintInterface $print)
     {
-        $key = $this->getUniqueKey($file);
-        $print->title($this->getOutputFromKey($key), 0);
+        $key = self::getUniqueKey($this->name);
+        $print->title($this->getOutputFromKey($key, $this->name), 0);
         $this->runTestsInSpec($print, 1);
     }
 
@@ -96,9 +99,8 @@ class Spec
     {
         $found = false;
         foreach ($this->output as $key => $value) {
-            $output = $this->getOutputFromKey($key);
-            $hash = $output->getBinding('id')->getDecoratedValue();
-            if ($hash === $id || ($value instanceof Spec && $value->findTestInSpec($id))) {
+            $contains = strpos($key, $id) !== false || $value->getName() === $id;
+            if ($contains || ($value instanceof Spec && $value->findTestInSpec($id))) {
                 $this->output = [$key => $value];
                 $found = true;
                 break;
@@ -115,13 +117,13 @@ class Spec
 
     private function runEntityOfASpec(PrintInterface $print, int $depth)
     {
-        return function ($value, $key) use ($print, $depth) {
+        return function ($value, $id) use ($print, $depth) {
             if ($value instanceof Spec) {
-                $print->title($this->getOutputFromKey($key), $depth);
+                $print->title($this->getOutputFromKey($id, $value->getName()), $depth);
                 $value->runTestsInSpec($print, $depth + 1);
-            } elseif (is_callable($value)) {
-                $output = $this->runTest($value);
-                $title = $this->getOutputFromKey($key, $output->getStatus());
+            } elseif ($value instanceof It) {
+                $output = $this->runTest($value->getTest());
+                $title = $this->getOutputFromKey($id, $value->getName(), $output->getStatus());
                 $print->result($title, $output, $depth);
             }
         };
@@ -153,12 +155,11 @@ class Spec
         return new Output(Status::SUCCESS, new Text('', Color::PRIMARY));
     }
 
-    private function getOutputFromKey(string $key, string $status = Status::WARNING): Output
+    private function getOutputFromKey(string $id, string $title, string $status = Status::WARNING): Output
     {
-        [$id, $name] = explode(':', $key);
         return new Output(
             $status,
-            new Text(":id {$name}", Color::PRIMARY),
+            new Text(":id {$title}", Color::PRIMARY),
             ['id' => new Text("$id", $status, ['KEY'])]
         );
     }
@@ -196,23 +197,39 @@ class Spec
         ($this->afterClosure)($this->classBuilder);
     }
 
+    private static function getKey(string $name): string
+    {
+        return md5($name);
+    }
+
     /**
      * @param string $name
+     * @param bool $temp
      * @return string
      * @throws \Exception
      */
-    private function getUniqueKey(string $name): string
+    private static function getUniqueKey(string $name, bool $temp = false): string
     {
-        $key = md5($name) . ":$name";
-        if (isset($this->output[$key])) {
+        $key = self::getKey($name);
+        if (self::$keys[$key] && !$temp) {
             throw new \Exception("Tests must have different names");
+        } else {
+            self::$keys[$key] = true;
         }
 
         return $key;
     }
 
-    public static function class(string $class)
+    public static function class(string $title, string $class)
     {
-        return new Spec(new ClassBuilder($class));
+        return new Spec('class ' . $title, new ClassBuilder($class));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

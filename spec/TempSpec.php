@@ -4,7 +4,7 @@ namespace OneSpec;
 
 use OneSpec\Architect\ClassBuilder;
 
-$spec = Spec::class(\DateTime::class);
+$spec = Spec::class(__FILE__,\DateTime::class);
 
 $spec->before(function (ClassBuilder $obj) {
     $obj->beConstructedWith("now", new \DateTimeZone("UTC"));
@@ -23,7 +23,7 @@ $spec->describe("aasd ad w f naskjd askn kfkl abf askna snaskd naskd lkajsdn kas
         });
     });
 
-    $spec->it("c", function ($expect, ClassBuilder $obj) {
+    $spec->it("should have a UTC timezone", function ($expect, ClassBuilder $obj) {
         $expect($obj->getTimezone()->getName())->toBeEqualTo("UTC");
     });
 });
