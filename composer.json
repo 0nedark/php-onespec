@@ -1,6 +1,6 @@
 {
     "name": "0nedark/onespec",
-    "description": "Testing framework",
+    "description": "Testing framework for php based on Jest and influenced by phpspec...",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -15,7 +15,9 @@
         "symfony/console": "^4.1",
         "ext-json": "^1.5"
     },
-    "require-dev": {},
+    "require-dev": {
+        "0nedark/onespec-stable": "^1.0"
+    },
     "autoload": {
         "psr-4": {
             "OneSpec\\": "src/"

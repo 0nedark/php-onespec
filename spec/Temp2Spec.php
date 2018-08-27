@@ -1,8 +1,8 @@
 <?php
 
-namespace OneSpec;
+namespace OneSpec\Stable;
 
-use OneSpec\Architect\ClassBuilder;
+use OneSpec\Stable\Architect\ClassBuilder;
 
 $spec = Spec::class(__FILE__,\DateTime::class);
 
