@@ -11,24 +11,7 @@ $spec->before(function (ClassBuilder $obj) {
 });
 
 $spec->describe("some A", function(Spec $spec) {
-    $spec->it("some B", function ($expect, ClassBuilder $obj) {
-        sleep(1);
-        $expect($obj->getTimezone()->getName())->toBeEqualTo("Europe/London");
-    });
-
-    $spec->describe("some C", function(Spec $spec) {
-        $spec->it("some D", function ($expect, ClassBuilder $obj) {
-            $obj->beConstructedWith("now", new \DateTimeZone("Europe/London"));
-            $expect($obj->getTimezone()->getName())->toNotBeEqualTo("Europe/London");
-        });
-    });
-
-    $spec->it("some E", function ($expect, ClassBuilder $obj) {
+    $spec->it("aasd ad w f naskjd askn kfkl abf askna snaskd naskd lkajsdn kasnd kafk as nad nakfn alkf akls dnaksdn and kasjd kjaaksdn klasdb klasd kasbdj absdjab kajsbd jasuay dbuad uayvdauysdvquwqu vfuavsd vasd vasd uadv quydvsav kasdv uydwv uasvd hasvd uyv uasvd asvd vuwqdv aksdv uqv", function ($expect, ClassBuilder $obj) {
         $expect($obj->getTimezone()->getName())->toBeEqualTo("UTC");
     });
-});
-
-$spec->it("some F", function ($expect, ClassBuilder $obj) {
-    $obj->setTimezone(new \DateTimeZone('ASD'));
-    $expect($obj->getTimezone()->getName())->toBeEqualTo("ASD");
 });

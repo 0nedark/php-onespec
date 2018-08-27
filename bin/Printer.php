@@ -12,6 +12,7 @@ use function Functional\each;
 use function Functional\reduce_left;
 use OneSpec\PrintInterface;
 use OneSpec\Result\Color;
+use OneSpec\Result\Icon;
 use OneSpec\Result\Output;
 use OneSpec\Result\Text;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
@@ -36,11 +37,11 @@ class Printer implements PrintInterface
         $secondary = new OutputFormatterStyle('yellow', null, ['bold']);
         $io->getFormatter()->setStyle('secondary', $secondary);
 
-        $success = new OutputFormatterStyle('green', null, ['bold']);
+        $success = new OutputFormatterStyle('green', null);
         $io->getFormatter()->setStyle('success', $success);
-        $failure = new OutputFormatterStyle('red', null, ['bold']);
+        $failure = new OutputFormatterStyle('red', null);
         $io->getFormatter()->setStyle('failure', $failure);
-        $warning = new OutputFormatterStyle('yellow', null, ['bold']);
+        $warning = new OutputFormatterStyle('yellow', null);
         $io->getFormatter()->setStyle('warning', $warning);
         $error = new OutputFormatterStyle('magenta');
         $io->getFormatter()->setStyle('exception', $error);
@@ -91,30 +92,43 @@ class Printer implements PrintInterface
         };
     }
 
-    private function writeLines(Output $text, int $tabs)
+    private function writeLines(Output $text, int $tabs, Icon $icon = null)
     {
         $lines = reduce_left($text, $this->buildLines($tabs), []);
-        each($lines, function ($line) use ($tabs, $text) {
+        each($lines, function ($line, $i) use ($tabs, $text, $icon) {
             $color = $text->getMessage()->getColor();
             if ($color !== Color::NONE) {
                 $line = '<' . $color . '>' . $line . '</>';
             }
 
-            $this->io->write('- ');
-            $this->io->writeln(str_repeat(' ', $tabs) . $line);
+            $space = ' ';
+            $left = '  ' . str_repeat($space, $tabs);
+
+            if ($i == 0 && isset($icon)) {
+                $space = '-';
+                $left = '--' . str_repeat($space, $tabs);
+            }
+
+            if ($i == 0 && isset($icon) && $icon->getColor() !== Color::NONE) {
+                $space = '-';
+                $left = '<' . $icon->getColor() . '>' . $icon->getValue() . '-' . str_repeat($space, $tabs) . '</>';
+            }
+
+            $this->io->write($left);
+            $this->io->writeln($line);
         });
     }
 
-    function result(Output $title, Output $result, int $depth)
+    function result(Output $title, Icon $icon, Output $result, int $depth)
     {
-        $this->title($title, $depth);
+        $this->title($title, $icon, $depth);
         if ($result->getStatus() !== 'SUCCESS') {
             $this->writeLines($result, $depth * self::INDENTATION + self::INDENTATION);
         }
     }
 
-    function title(Output $title, int $depth)
+    function title(Output $title, Icon $icon, int $depth)
     {
-        $this->writeLines($title, $depth * self::INDENTATION);
+        $this->writeLines($title, $depth * self::INDENTATION, $icon);
     }
 }

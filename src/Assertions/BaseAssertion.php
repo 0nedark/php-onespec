@@ -7,14 +7,14 @@ use OneSpec\Result\Status;
 
 class BaseAssertion
 {
-    protected $value;
+    protected $actual;
     protected $positive;
 
     use Equality;
 
     public function __construct($value)
     {
-        $this->value = $value;
+        $this->actual = $value;
     }
 
     /**

@@ -6,6 +6,7 @@ use function Functional\each;
 use OneSpec\Architect\ClassBuilder;
 use OneSpec\Errors\AssertionFailed;
 use OneSpec\Result\Color;
+use OneSpec\Result\Icon;
 use OneSpec\Result\Output;
 use OneSpec\Result\Status;
 use OneSpec\Result\Text;
@@ -91,7 +92,8 @@ class Spec
     public function runSpecInFile(PrintInterface $print)
     {
         $key = self::getUniqueKey($this->name);
-        $print->title($this->getOutputFromKey($key, $this->name), 0);
+        $title = $this->getOutputFromKey($key, $this->name);
+        $print->title($title, new Icon($title->getStatus()), 0);
         $this->runTestsInSpec($print, 1);
     }
 
@@ -119,12 +121,13 @@ class Spec
     {
         return function ($value, $id) use ($print, $depth) {
             if ($value instanceof Spec) {
-                $print->title($this->getOutputFromKey($id, $value->getName()), $depth);
+                $title = $this->getOutputFromKey($id, $value->getName());
+                $print->title($title, new Icon($title->getStatus()), $depth);
                 $value->runTestsInSpec($print, $depth + 1);
             } elseif ($value instanceof It) {
                 $output = $this->runTest($value->getTest());
                 $title = $this->getOutputFromKey($id, $value->getName(), $output->getStatus());
-                $print->result($title, $output, $depth);
+                $print->result($title, new Icon($output->getStatus()), $output, $depth);
             }
         };
     }
@@ -155,12 +158,16 @@ class Spec
         return new Output(Status::SUCCESS, new Text('', Color::PRIMARY));
     }
 
-    private function getOutputFromKey(string $id, string $title, string $status = Status::WARNING): Output
+    private function getOutputFromKey(string $id, string $title, string $status = Status::NONE): Output
     {
         return new Output(
             $status,
-            new Text(":id {$title}", Color::PRIMARY),
-            ['id' => new Text("$id", $status, ['KEY'])]
+            new Text(":id :pipe ${title}", Color::PRIMARY),
+            [
+                'icon' => new Icon($status),
+                'id' => new Text("$id", $status, ['KEY']),
+                'pipe' => new Text('|', Color::SECONDARY),
+            ]
         );
     }
 

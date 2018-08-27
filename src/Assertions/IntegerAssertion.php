@@ -2,11 +2,11 @@
 
 namespace OneSpec\Assertions;
 
-use OneSpec\Predicates\Comparator;
+use OneSpec\Predicates\Compare;
 
 class IntegerAssertion extends BaseAssertion
 {
-    use Comparator;
+    use Compare;
 
     public function __construct(int $value)
     {

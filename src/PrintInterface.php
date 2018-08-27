@@ -8,10 +8,11 @@
 
 namespace OneSpec;
 
+use OneSpec\Result\Icon;
 use OneSpec\Result\Output;
 
 interface PrintInterface
 {
-    function result(Output $title, Output $result, int $depth);
-    function title(Output $title, int $depth);
+    function result(Output $title, Icon $icon, Output $result, int $depth);
+    function title(Output $title, Icon $icon, int $depth);
 }

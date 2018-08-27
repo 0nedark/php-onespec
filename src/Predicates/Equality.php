@@ -8,30 +8,30 @@ use OneSpec\Result\Text;
 
 trait Equality
 {
-    public function beEqualTo(array $arguments): Output
+    public function beEqualTo(array $wanted): Output
     {
-        $passed = $this->hasAssertionFailed($this->value == $arguments[0]);
-        $positive = $this->positive ? 'get' : 'not get';
+        $passed = $this->hasAssertionFailed($this->actual == $wanted[0]);
+        $positive = $this->positive ? 'be' : 'not be';
         return new Output(
             $this->getStatus($passed),
-            new Text("Expected to ${positive} :expected but received :actual", Color::PRIMARY),
+            new Text("Expected :actual to ${positive} like :wanted", Color::PRIMARY),
             [
-                "expected" => new Text($arguments[0], Color::SUCCESS),
-                "actual" => new Text($this->value, Color::FAILURE),
+                "actual" => new Text($this->actual, Color::FAILURE),
+                "wanted" => new Text($wanted[0], Color::SUCCESS),
             ]
         );
     }
 
-    public function beIdenticalTo(array $arguments): Output
+    public function beIdenticalTo(array $wanted): Output
     {
-        $passed = $this->hasAssertionFailed($this->value === $arguments[0]);
+        $passed = $this->hasAssertionFailed($this->actual === $wanted[0]);
         $positive = $this->positive ? 'be' : 'not be';
         return new Output(
             $this->getStatus($passed),
-            new Text("Expected :expected to ${positive} identical to :actual", Color::PRIMARY),
+            new Text("Expected :actual to ${positive} identical to :wanted", Color::PRIMARY),
             [
-                "expected" => new Text($arguments[0], Color::SUCCESS),
-                "actual" => new Text($this->value, Color::FAILURE)
+                "actual" => new Text($this->actual, Color::FAILURE),
+                "wanted" => new Text($wanted[0], Color::SUCCESS),
             ]
         );
     }

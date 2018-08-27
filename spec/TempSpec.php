@@ -10,16 +10,15 @@ $spec->before(function (ClassBuilder $obj) {
     $obj->beConstructedWith("now", new \DateTimeZone("UTC"));
 });
 
-$spec->describe("aasd ad w f naskjd askn kfkl abf askna snaskd naskd lkajsdn kasnd kafk as nad nakfn alkf akls dnaksdn and kasjd kjaaksdn klasdb klasd kasbdj absdjab kajsbd jasuay dbuad uayvdauysdvquwqu vfuavsd vasd vasd uadv quydvsav kasdv uydwv uasvd hasvd uyv uasvd asvd vuwqdv aksdv uqv", function(Spec $spec) {
+$spec->describe("qaz", function(Spec $spec) {
     $spec->it("asd", function ($expect, ClassBuilder $obj) {
-        sleep(1);
         $expect($obj->getTimezone()->getName())->toBeEqualTo("Europe/London");
     });
 
     $spec->describe("qwe", function(Spec $spec) {
         $spec->it("b", function ($expect, ClassBuilder $obj) {
             $obj->beConstructedWith("now", new \DateTimeZone("Europe/London"));
-            $expect($obj->getTimezone()->getName())->toNotBeEqualTo("Europe/London");
+            $expect(43)->toBeInclusivelyBetween(43,45);
         });
     });
 
