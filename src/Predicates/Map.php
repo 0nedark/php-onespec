@@ -100,7 +100,7 @@ trait Map
     {
         $isStrictModeDisabled = $wanted[1] === true;
         $strict = $isStrictModeDisabled ? ' :strict' : '';
-        $notFound = reduce_left($wanted[0], function($value, $key, $c, $carry) use ($isStrictModeDisabled) {
+        $notFoundActual = reduce_left($wanted[0], function($value, $key, $c, $carry) use ($isStrictModeDisabled) {
             return reject($carry, function ($actualKeys) use ($value, $isStrictModeDisabled) {
                 if ($isStrictModeDisabled) {
                     return $actualKeys == $value;
@@ -110,7 +110,17 @@ trait Map
             });
         }, array_keys($this->actual));
 
-        $passed = $this->hasAssertionFailed(empty($notFound));
+        $notFoundWanted = reduce_left($this->actual, function($value, $key, $c, $carry) use ($isStrictModeDisabled) {
+            return reject($carry, function ($wanted) use ($key, $isStrictModeDisabled) {
+                if ($isStrictModeDisabled) {
+                    return $wanted == $key;
+                } else {
+                    return $wanted === $key;
+                }
+            });
+        }, $wanted[0]);
+
+        $passed = $this->hasAssertionFailed(empty($notFoundActual) && empty($notFoundWanted));
         $positive = $this->positive ? 'contain' : 'not contain';
         return new Output(
             $this->getStatus($passed),
@@ -180,7 +190,7 @@ trait Map
     {
         $isStrictModeDisabled = $wanted[1] === true;
         $strict = $isStrictModeDisabled ? ' :strict' : '';
-        $notFound = reduce_left($wanted[0], function($value, $key, $c, $carry) use ($isStrictModeDisabled) {
+        $notFoundActual = reduce_left($wanted[0], function($value, $key, $c, $carry) use ($isStrictModeDisabled) {
             return reject($carry, function ($actualValues) use ($value, $isStrictModeDisabled) {
                 if ($isStrictModeDisabled) {
                     return $actualValues == $value;
@@ -190,7 +200,17 @@ trait Map
             });
         }, array_values($this->actual));
 
-        $passed = $this->hasAssertionFailed(empty($notFound));
+        $notFoundWanted = reduce_left($this->actual, function($value, $key, $c, $carry) use ($isStrictModeDisabled) {
+            return reject($carry, function ($wanted) use ($value, $isStrictModeDisabled) {
+                if ($isStrictModeDisabled) {
+                    return $wanted == $value;
+                } else {
+                    return $wanted === $value;
+                }
+            });
+        }, $wanted[0]);
+
+        $passed = $this->hasAssertionFailed(empty($notFoundActual) && empty($notFoundWanted));
         $positive = $this->positive ? 'contain' : 'not contain';
         return new Output(
             $this->getStatus($passed),
