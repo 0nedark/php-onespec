@@ -8,5 +8,8 @@ start:
 shell:
 	docker exec -it onespec sh
 
-test\:%:
-	docker exec -it onespec sh -c "/app/scripts/tests.sh $@ '$(path)' '$(class)' '$(line)'"
+compile:
+	docker exec -it onespec /app/bin/build.sh
+
+test:
+	docker exec -it onespec /app/bin/onespec run $(hash)
