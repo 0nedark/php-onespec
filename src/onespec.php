@@ -1,7 +1,6 @@
-#!/usr/bin/env php
 <?php
 
-namespace OneSpec\Cli;
+namespace OneSpec;
 
 require getcwd() . '/vendor/autoload.php';
 

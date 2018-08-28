@@ -3,8 +3,8 @@
 namespace Stable;
 
 use OneSpec\It;
-use OneSpec\Stable\Architect\ClassBuilder;
-use OneSpec\Stable\Spec;
+use OneSpec\Architect\ClassBuilder;
+use OneSpec\Spec;
 
 $spec = Spec::class(__FILE__,It::class);
 

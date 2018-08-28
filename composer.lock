@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "125776937e4109ff0bdcae4964a20299",
+    "content-hash": "f953fed4594cf9af002447575b0fc6c6",
     "packages": [
         {
             "name": "lstrojny/functional-php",
@@ -273,50 +273,7 @@
             "time": "2018-08-06T14:22:27+00:00"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "0nedark/onespec-stable",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/0nedark/php-onespec-stable.git",
-                "reference": "cf562b2839972ba5db32755a4b30471cdce2527a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/0nedark/php-onespec-stable/zipball/cf562b2839972ba5db32755a4b30471cdce2527a",
-                "reference": "cf562b2839972ba5db32755a4b30471cdce2527a",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "^1.5",
-                "lstrojny/functional-php": "^1.8",
-                "php": "^7.1",
-                "symfony/console": "^4.1"
-            },
-            "bin": [
-                "bin/onespec.php"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "OneSpec\\Stable\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dovydas Rupsys",
-                    "email": "dovydas.rupsys@outlook.com"
-                }
-            ],
-            "description": "Testing framework",
-            "time": "2018-08-27T22:52:38+00:00"
-        }
-    ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
