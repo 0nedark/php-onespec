@@ -6,18 +6,16 @@
  * Time: 21:09
  */
 
-$srcRoot = getcwd() . "/src";
+$srcRoot = getcwd();
 $buildRoot = getcwd() . "/bin";
 
 if (file_exists($buildRoot . "/onespec")) {
     unlink($buildRoot . "/onespec");
 }
 
-$phar = new Phar(
-    $buildRoot . "/onespec.phar",
-    FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::KEY_AS_FILENAME,
-    'onespec'
-);
-
-$phar->setDefaultStub('onespec.php');
+$phar = new Phar($buildRoot . "/onespec.phar");
+$phar->startBuffering();
+$defaultStub = $phar->createDefaultStub('src/onespec.php');
 $phar->buildFromDirectory($srcRoot,'/.php$/');
+$phar->setStub("#!/usr/bin/env php \n" . $defaultStub);
+$phar->stopBuffering();

@@ -2,7 +2,7 @@
 
 namespace OneSpec;
 
-require getcwd() . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use OneSpec\Commands\CreateCommand;
 use OneSpec\Commands\DestroyCommand;
