@@ -13,10 +13,10 @@
     "require": {
         "lstrojny/functional-php": "^1.8",
         "symfony/console": "^4.1",
-        "ext-json": "^1.5",
-        "0nedark/onespec": "^0.0.1"
+        "ext-json": "^1.5"
     },
     "require-dev": {
+        "0nedark/onespec": "^0.0.1"
     },
     "autoload": {
         "psr-4": {
