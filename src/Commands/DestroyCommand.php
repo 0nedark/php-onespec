@@ -6,7 +6,7 @@
  * Time: 10:42
  */
 
-namespace Xae3Oow5cahz9shahngu\Commands;
+namespace OneSpec\Commands;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
