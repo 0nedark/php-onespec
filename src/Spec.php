@@ -59,7 +59,7 @@ class Spec
     public function it(string $name, callable $tests)
     {
         $name = 'it ' . $name;
-        $key = self::getUniqueKey($name);
+        $key = self::getUniqueKey($this->hash . $name);
         $this->output[$key] = new It(
             $name,
             function () use ($tests) {
