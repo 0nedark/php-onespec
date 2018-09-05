@@ -276,16 +276,16 @@
     "packages-dev": [
         {
             "name": "0nedark/onespec",
-            "version": "0.0.2",
+            "version": "0.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/0nedark/php-onespec.git",
-                "reference": "2a632601d6c59598167f07955d2cb63fc543a4e1"
+                "reference": "fd76cdbea5293e47bb0988fdede24b220cc1d88b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/0nedark/php-onespec/zipball/2a632601d6c59598167f07955d2cb63fc543a4e1",
-                "reference": "2a632601d6c59598167f07955d2cb63fc543a4e1",
+                "url": "https://api.github.com/repos/0nedark/php-onespec/zipball/fd76cdbea5293e47bb0988fdede24b220cc1d88b",
+                "reference": "fd76cdbea5293e47bb0988fdede24b220cc1d88b",
                 "shasum": ""
             },
             "require": {
@@ -294,7 +294,7 @@
                 "symfony/console": "^4.1"
             },
             "require-dev": {
-                "0nedark/onespec": "^0.0.1"
+                "0nedark/onespec": "0.*"
             },
             "bin": [
                 "bin/onespec"
@@ -316,7 +316,7 @@
                 }
             ],
             "description": "Testing framework for php based on Jest and influenced by phpspec...",
-            "time": "2018-09-05T22:19:33+00:00"
+            "time": "2018-09-05T22:27:11+00:00"
         }
     ],
     "aliases": [],
