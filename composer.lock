@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f953fed4594cf9af002447575b0fc6c6",
+    "content-hash": "8fa6c817d9d4be1d22e9c36151f64b2f",
     "packages": [
+        {
+            "name": "0nedark/onespec",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/0nedark/php-onespec.git",
+                "reference": "f7b87dd175cc18df16e2f9a733558ff53058d60c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/0nedark/php-onespec/zipball/f7b87dd175cc18df16e2f9a733558ff53058d60c",
+                "reference": "f7b87dd175cc18df16e2f9a733558ff53058d60c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "^1.5",
+                "lstrojny/functional-php": "^1.8",
+                "symfony/console": "^4.1"
+            },
+            "bin": [
+                "bin/onespec"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OneSpec\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dovydas Rupsys",
+                    "email": "dovydas.rupsys@outlook.com"
+                }
+            ],
+            "description": "Testing framework for php based on Jest and influenced by phpspec...",
+            "time": "2018-09-05T22:11:07+00:00"
+        },
         {
             "name": "lstrojny/functional-php",
             "version": "1.8.0",
