@@ -14,6 +14,8 @@ use Xae3Oow5cahz9shahngu\Result\Text;
 class Spec
 {
     private static $keys = [];
+
+    private $hash;
     private $name;
     private $classBuilder;
     private $prevBeforeClosures;
@@ -23,11 +25,13 @@ class Spec
     private $output;
 
     private function __construct(
+        string $hash,
         string $name,
         ClassBuilder $classBuilder,
         array $before = [],
         array $after = []
     ) {
+        $this->hash = $hash;
         $this->name = $name;
         $this->classBuilder = $classBuilder;
         $this->prevBeforeClosures = $before;
@@ -40,15 +44,16 @@ class Spec
     public function describe(string $title, callable $describe)
     {
         $name = 'describe ' . $title;
-        $key = self::getUniqueKey($name);
-        $this->output[$key] = new Spec(
+        $hash = self::getUniqueKey($this->hash . $name);
+        $this->output[$hash] = new Spec(
+            $hash,
             $name,
             $this->classBuilder,
             $this->getBeforeClosures(),
             $this->getAfterClosures()
         );
 
-        $describe($this->output[$key]);
+        $describe($this->output[$hash]);
     }
 
     public function it(string $name, callable $tests)
@@ -229,7 +234,9 @@ class Spec
 
     public static function class(string $title, string $class)
     {
-        return new Spec('class ' . $title, new ClassBuilder($class));
+        $hash = self::getUniqueKey('class ' . $title);
+        $name = 'class ' . $title;
+        return new Spec($hash, $name, new ClassBuilder($class));
     }
 
     /**
