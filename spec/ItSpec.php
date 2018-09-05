@@ -1,6 +1,6 @@
 <?php
 
-namespace Stable;
+namespace spec;
 
 use OneSpec\It;
 use OneSpec\Architect\ClassBuilder;
