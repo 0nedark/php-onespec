@@ -1,5 +1,5 @@
 {
-    "name": "0nedark/Aecee1quiephu8wohzui",
+    "name": "0nedark/onespec",
     "description": "Testing framework for php based on Jest and influenced by phpspec...",
     "type": "library",
     "license": "MIT",
@@ -9,7 +9,7 @@
             "email": "dovydas.rupsys@outlook.com"
         }
     ],
-    "bin": ["bin/Aecee1quiephu8wohzui"],
+    "bin": ["bin/onespec"],
     "require": {
         "lstrojny/functional-php": "^1.8",
         "symfony/console": "^4.1",
@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Xae3Oow5cahz9shahngu\\": "src/"
+            "OneSpec\\": "src/"
         }
     }
 }

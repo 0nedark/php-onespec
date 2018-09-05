@@ -6,7 +6,7 @@
  * Time: 13:17
  */
 
-namespace Xae3Oow5cahz9shahngu\Result;
+namespace OneSpec\Result;
 
 
 class Icon extends Text

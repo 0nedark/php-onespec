@@ -3,12 +3,12 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Xae3Oow5cahz9shahngu\Commands\CreateCommand;
-use Xae3Oow5cahz9shahngu\Commands\DestroyCommand;
-use Xae3Oow5cahz9shahngu\Commands\RunCommand;
+use OneSpec\Commands\CreateCommand;
+use OneSpec\Commands\DestroyCommand;
+use OneSpec\Commands\RunCommand;
 use Symfony\Component\Console\Application;
 
-$application = new Application('Xae3Oow5cahz9shahngu', '0.0.0');
+$application = new Application('OneSpec', '0.0.0');
 $application->add(new RunCommand());
 $application->add(new CreateCommand());
 $application->add(new DestroyCommand());

@@ -6,15 +6,15 @@
  * Time: 10:42
  */
 
-namespace Xae3Oow5cahz9shahngu\Commands;
+namespace OneSpec\Commands;
 
 use DirectoryIterator;
 use function Functional\map;
 use function Functional\each;
 use function Functional\filter;
-use Xae3Oow5cahz9shahngu\Config;
-use Xae3Oow5cahz9shahngu\Printer;
-use Xae3Oow5cahz9shahngu\Spec;
+use OneSpec\Config;
+use OneSpec\Printer;
+use OneSpec\Spec;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

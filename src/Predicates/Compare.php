@@ -1,10 +1,10 @@
 <?php
 
-namespace Xae3Oow5cahz9shahngu\Predicates;
+namespace OneSpec\Predicates;
 
-use Xae3Oow5cahz9shahngu\Result\Color;
-use Xae3Oow5cahz9shahngu\Result\Output;
-use Xae3Oow5cahz9shahngu\Result\Text;
+use OneSpec\Result\Color;
+use OneSpec\Result\Output;
+use OneSpec\Result\Text;
 
 trait Compare
 {

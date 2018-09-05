@@ -6,7 +6,7 @@
  * Time: 16:02
  */
 
-namespace Xae3Oow5cahz9shahngu\Architect\Error;
+namespace OneSpec\Architect\Error;
 
 class ConstructorException extends \Exception
 {
