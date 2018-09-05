@@ -6,10 +6,10 @@
  * Time: 15:27
  */
 
-namespace Xae3Oow5cahz9shahngu;
+namespace OneSpec;
 
-use Xae3Oow5cahz9shahngu\Result\Icon;
-use Xae3Oow5cahz9shahngu\Result\Output;
+use OneSpec\Result\Icon;
+use OneSpec\Result\Output;
 
 interface PrintInterface
 {

@@ -6,7 +6,7 @@
  * Time: 11:23
  */
 
-namespace Xae3Oow5cahz9shahngu;
+namespace OneSpec;
 
 use function Functional\concat;
 use function Functional\intersperse;

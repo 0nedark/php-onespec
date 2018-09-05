@@ -6,7 +6,7 @@
  * Time: 14:48
  */
 
-namespace Xae3Oow5cahz9shahngu\Result;
+namespace OneSpec\Result;
 
 class Text
 {
