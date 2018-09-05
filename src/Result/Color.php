@@ -6,7 +6,7 @@
  * Time: 15:48
  */
 
-namespace OneSpec\Result;
+namespace Xae3Oow5cahz9shahngu\Result;
 
 
 class Color

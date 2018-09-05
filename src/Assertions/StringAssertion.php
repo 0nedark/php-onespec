@@ -1,6 +1,6 @@
 <?php
 
-namespace OneSpec\Assertions;
+namespace Xae3Oow5cahz9shahngu\Assertions;
 
 class StringAssertion extends BaseAssertion
 {

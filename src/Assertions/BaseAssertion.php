@@ -1,9 +1,9 @@
 <?php
 
-namespace OneSpec\Assertions;
+namespace Xae3Oow5cahz9shahngu\Assertions;
 
-use OneSpec\Predicates\Equality;
-use OneSpec\Result\Status;
+use Xae3Oow5cahz9shahngu\Predicates\Equality;
+use Xae3Oow5cahz9shahngu\Result\Status;
 
 class BaseAssertion
 {

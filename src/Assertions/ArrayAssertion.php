@@ -6,10 +6,10 @@
  * Time: 15:30
  */
 
-namespace OneSpec\Assertions;
+namespace Xae3Oow5cahz9shahngu\Assertions;
 
-use OneSpec\Predicates\Collection;
-use OneSpec\Predicates\Map;
+use Xae3Oow5cahz9shahngu\Predicates\Collection;
+use Xae3Oow5cahz9shahngu\Predicates\Map;
 
 class ArrayAssertion extends BaseAssertion
 {

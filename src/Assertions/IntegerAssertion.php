@@ -1,8 +1,8 @@
 <?php
 
-namespace OneSpec\Assertions;
+namespace Xae3Oow5cahz9shahngu\Assertions;
 
-use OneSpec\Predicates\Compare;
+use Xae3Oow5cahz9shahngu\Predicates\Compare;
 
 class IntegerAssertion extends BaseAssertion
 {

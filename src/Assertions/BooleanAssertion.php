@@ -1,8 +1,8 @@
 <?php
 
-namespace OneSpec\Assertions;
+namespace Xae3Oow5cahz9shahngu\Assertions;
 
-use OneSpec\Predicates\Boolean;
+use Xae3Oow5cahz9shahngu\Predicates\Boolean;
 
 class BooleanAssertion extends BaseAssertion
 {

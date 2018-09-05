@@ -6,7 +6,7 @@
  * Time: 17:29
  */
 
-namespace OneSpec\Result;
+namespace Xae3Oow5cahz9shahngu\Result;
 
 
 interface Word extends \Traversable {}

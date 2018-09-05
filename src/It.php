@@ -6,7 +6,7 @@
  * Time: 10:48
  */
 
-namespace OneSpec;
+namespace Xae3Oow5cahz9shahngu;
 
 class It
 {

@@ -6,14 +6,14 @@
  * Time: 15:30
  */
 
-namespace OneSpec;
+namespace Xae3Oow5cahz9shahngu;
 
 use function Functional\each;
 use function Functional\reduce_left;
-use OneSpec\Result\Color;
-use OneSpec\Result\Icon;
-use OneSpec\Result\Output;
-use OneSpec\Result\Text;
+use Xae3Oow5cahz9shahngu\Result\Color;
+use Xae3Oow5cahz9shahngu\Result\Icon;
+use Xae3Oow5cahz9shahngu\Result\Output;
+use Xae3Oow5cahz9shahngu\Result\Text;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;

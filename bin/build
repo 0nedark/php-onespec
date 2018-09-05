@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+find bin -type f -name "onespec" -exec sed -i'' -e 's/Xae3Oow5cahz9shahngu/OneSpec/g' {} +
+find src -type f -name "*.php" -exec sed -i'' -e 's/Xae3Oow5cahz9shahngu/OneSpec/g' {} +
+find . -type f -name "composer.json" -exec sed -i'' -e 's/Xae3Oow5cahz9shahngu/OneSpec/g' {} +
+find . -type f -name "composer.json" -exec sed -i'' -e 's/Aecee1quiephu8wohzui/onespec/g' {} +
+composer install

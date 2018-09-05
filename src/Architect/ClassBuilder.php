@@ -6,9 +6,9 @@
  * Time: 23:41
  */
 
-namespace OneSpec\Architect;
+namespace Xae3Oow5cahz9shahngu\Architect;
 
-use OneSpec\Architect\Error\ConstructorException;
+use Xae3Oow5cahz9shahngu\Architect\Error\ConstructorException;
 use ReflectionClass;
 
 class ClassBuilder

@@ -1,10 +1,10 @@
 <?php
 
-namespace OneSpec\Predicates;
+namespace Xae3Oow5cahz9shahngu\Predicates;
 
-use OneSpec\Result\Color;
-use OneSpec\Result\Output;
-use OneSpec\Result\Text;
+use Xae3Oow5cahz9shahngu\Result\Color;
+use Xae3Oow5cahz9shahngu\Result\Output;
+use Xae3Oow5cahz9shahngu\Result\Text;
 
 trait Equality
 {
