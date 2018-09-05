@@ -1,9 +1,8 @@
 version: '2.1'
 services:
   package:
-    build: .
+    image: drupsys/php-package-alpine
     container_name: onespec
-    working_dir: /app
     volumes:
       - ./:/app
-    entrypoint: sh -c "while true; do sleep 1d; done"
+
