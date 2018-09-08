@@ -1,6 +1,6 @@
 <?php
 
-namespace Xae3Oow5cahz9shahngu\Assertions;
+namespace OneSpec\Assertions;
 
 use OneSpec\Predicates\Throwing;
 

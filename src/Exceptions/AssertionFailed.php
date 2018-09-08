@@ -1,8 +1,8 @@
 <?php
 
-namespace Xae3Oow5cahz9shahngu\Exceptions;
+namespace OneSpec\Exceptions;
 
-use Xae3Oow5cahz9shahngu\Result\Output;
+use OneSpec\Result\Output;
 
 class AssertionFailed extends \Exception
 {
