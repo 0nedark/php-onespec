@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f1bd4bc807b718e9f1d58c3ecdde918",
+    "content-hash": "9a723ed96cf2ec6f329593cef834f45e",
     "packages": [
         {
             "name": "0nedark/onespec",

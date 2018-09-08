@@ -15,9 +15,9 @@
         "phpspec/prophecy": "^1.8",
         "symfony/console": "^4.1",
         "ext-json": "^1.5",
-        "0nedark/onespec": "0.0.3"
     },
     "require-dev": {
+        "0nedark/onespec": "0.0.5"
     },
     "autoload": {
         "psr-4": {
