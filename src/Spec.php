@@ -24,7 +24,7 @@ class Spec
     private $afterClosure;
     private $output;
 
-    private function __construct(
+    public function __construct(
         string $hash,
         string $name,
         ClassBuilder $classBuilder,
@@ -96,7 +96,7 @@ class Spec
 
     public function runSpecInFile(PrintInterface $print)
     {
-        $key = self::getUniqueKey($this->name);
+        $key = self::getKey($this->name);
         $title = $this->getOutputFromKey($key, $this->name);
         $print->title($title, new Icon($title->getStatus()), 0);
         $this->runTestsInSpec($print, 1);
@@ -232,10 +232,10 @@ class Spec
         return $key;
     }
 
-    public static function class(string $title, string $class)
+    public static function class(string $class): Spec
     {
-        $hash = self::getUniqueKey('class ' . $title);
-        $name = 'class ' . $title;
+        $hash = self::getUniqueKey('class ' . $class);
+        $name = 'class ' . $class;
         return new Spec($hash, $name, new ClassBuilder($class));
     }
 

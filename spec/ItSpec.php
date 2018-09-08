@@ -2,9 +2,9 @@
 
 namespace spec;
 
-use OneSpec\It;
 use OneSpec\Architect\ClassBuilder;
 use OneSpec\Spec;
+use Xae3Oow5cahz9shahngu\It;
 
 $spec = Spec::class(__FILE__,It::class);
 

@@ -12,11 +12,12 @@
     "bin": ["bin/Aecee1quiephu8wohzui"],
     "require": {
         "lstrojny/functional-php": "^1.8",
+        "phpspec/prophecy": "^1.8",
         "symfony/console": "^4.1",
-        "ext-json": "^1.5"
+        "ext-json": "^1.5",
+        "0nedark/onespec": "0.0.3"
     },
     "require-dev": {
-        "0nedark/onespec": "0.*"
     },
     "autoload": {
         "psr-4": {

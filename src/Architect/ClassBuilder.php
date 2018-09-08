@@ -13,16 +13,17 @@ use ReflectionClass;
 
 class ClassBuilder
 {
-    private $args;
-    private $reflection;
+    private $args = [];
     private $object;
+    private $function;
+    private $class;
 
     public function __construct(string $class)
     {
-        $this->reflection = new ReflectionClass($class);
+        $this->class = $class;
     }
 
-    public function beConstructedWith(...$args)
+    public function beConstructed(...$args)
     {
         if (isset($this->object)) {
             throw new ConstructorException();
@@ -31,16 +32,30 @@ class ClassBuilder
         $this->args = empty($args) ? null : $args;
     }
 
+    public function beConstructedThrough(string $function, ...$args)
+    {
+        if (isset($this->object)) {
+            throw new ConstructorException();
+        }
+
+        $this->args = empty($args) ? null : $args;
+        $this->function = $function;
+    }
+
     public function build()
     {
         if (isset($this->object)) {
             return $this->object;
         }
 
-        if (count($this->args) > 0) {
-            $this->object = $this->reflection->newInstanceArgs($this->args);
+        if (isset($this->function)) {
+            $this->object = call_user_func($this->class . '::' . $this->function, ...$this->args);
+        } elseif (count($this->args) > 0) {
+            $reflection = new ReflectionClass($this->class);
+            $this->object = $reflection->newInstanceArgs($this->args);
         } else {
-            $class = $this->reflection->getName();
+            $reflection = new ReflectionClass($this->class);
+            $class = $reflection->getName();
             $this->object = new $class;
         }
 
@@ -49,13 +64,15 @@ class ClassBuilder
 
     public function reset()
     {
-        unset($this->object);
+        $this->args = [];
+        unset($this->object, $this->function);
     }
 
     public function __call($name, $arguments)
     {
         $object = $this->build();
-        $method = $this->reflection->getMethod($name);
+        $reflection = new ReflectionClass($this->class);
+        $method = $reflection->getMethod($name);
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $arguments);
