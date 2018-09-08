@@ -7,7 +7,7 @@ use Prophecy\Prophet;
 use Xae3Oow5cahz9shahngu\Printer;
 use Xae3Oow5cahz9shahngu\Spec as SpecMock;
 
-$spec = Spec::class(__FILE__,SpecMock::class);
+$spec = Spec::class(SpecMock::class);
 
 $spec->describe("name hashing", function(Spec $spec) {
     $spec->it("should not throw exception if describe name is same in inner describe", function ($expect) {
