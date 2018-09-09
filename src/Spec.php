@@ -3,7 +3,6 @@
 namespace Xae3Oow5cahz9shahngu;
 
 use function Functional\each;
-use Xae3Oow5cahz9shahngu\Architect\ClassBuilder;
 use Xae3Oow5cahz9shahngu\Exceptions\AssertionFailed;
 use Xae3Oow5cahz9shahngu\Result\Color;
 use Xae3Oow5cahz9shahngu\Result\Icon;
@@ -17,23 +16,20 @@ class Spec
 
     private $hash;
     private $name;
-    private $classBuilder;
     private $prevBeforeClosures;
     private $prevAfterClosures;
     private $beforeClosure;
     private $afterClosure;
     private $output;
 
-    public function __construct(
+    private function __construct(
         string $hash,
         string $name,
-        ClassBuilder $classBuilder,
         array $before = [],
         array $after = []
     ) {
         $this->hash = $hash;
         $this->name = $name;
-        $this->classBuilder = $classBuilder;
         $this->prevBeforeClosures = $before;
         $this->prevAfterClosures = $after;
         $this->beforeClosure = function () {};
@@ -48,7 +44,6 @@ class Spec
         $this->output[$hash] = new Spec(
             $hash,
             $name,
-            $this->classBuilder,
             $this->getBeforeClosures(),
             $this->getAfterClosures()
         );
@@ -66,7 +61,7 @@ class Spec
                 $this->callBeforeClosures();
                 $tests(function ($actual) {
                     return new Assert($actual);
-                }, $this->classBuilder);
+                });
                 $this->callAfterClosures();
             }
         );
@@ -186,11 +181,10 @@ class Spec
 
     private function callBeforeClosures()
     {
-        $this->classBuilder->reset();
         foreach ($this->prevBeforeClosures as $before) {
-            $before($this->classBuilder);
+            $before();
         }
-        ($this->beforeClosure)($this->classBuilder);
+        ($this->beforeClosure)();
     }
 
     private function getAfterClosures(): array
@@ -204,9 +198,9 @@ class Spec
     private function callAfterClosures()
     {
         foreach ($this->prevAfterClosures as $after) {
-            $after($this->classBuilder);
+            $after();
         }
-        ($this->afterClosure)($this->classBuilder);
+        ($this->afterClosure)();
     }
 
     private static function getKey(string $name): string
@@ -236,7 +230,7 @@ class Spec
     {
         $hash = self::getUniqueKey('class ' . $class);
         $name = 'class ' . $class;
-        return new Spec($hash, $name, new ClassBuilder($class));
+        return new Spec($hash, $name);
     }
 
     /**
