@@ -6,7 +6,7 @@
  * Time: 09:11
  */
 
-namespace Xae3Oow5cahz9shahngu\Exceptions;
+namespace OneSpec\Exceptions;
 
 class InvalidAssertionMethod extends \Exception
 {

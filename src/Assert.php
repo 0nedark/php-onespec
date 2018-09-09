@@ -1,20 +1,20 @@
 <?php
 
-namespace Xae3Oow5cahz9shahngu;
+namespace OneSpec;
 
 use function Functional\concat;
-use Xae3Oow5cahz9shahngu\Architect\ClassBuilder;
-use Xae3Oow5cahz9shahngu\Assertions\ArrayAssertion;
-use Xae3Oow5cahz9shahngu\Assertions\BooleanAssertion;
-use Xae3Oow5cahz9shahngu\Assertions\BaseAssertion;
-use Xae3Oow5cahz9shahngu\Assertions\CallableAssertion;
-use Xae3Oow5cahz9shahngu\Assertions\IntegerAssertion;
-use Xae3Oow5cahz9shahngu\Assertions\ObjectAssertion;
-use Xae3Oow5cahz9shahngu\Assertions\StringAssertion;
-use Xae3Oow5cahz9shahngu\Exceptions\AssertionFailed;
-use Xae3Oow5cahz9shahngu\Exceptions\InvalidAssertionMethod;
-use Xae3Oow5cahz9shahngu\Result\Output;
-use Xae3Oow5cahz9shahngu\Result\Status;
+use OneSpec\Architect\ClassBuilder;
+use OneSpec\Assertions\ArrayAssertion;
+use OneSpec\Assertions\BooleanAssertion;
+use OneSpec\Assertions\BaseAssertion;
+use OneSpec\Assertions\CallableAssertion;
+use OneSpec\Assertions\IntegerAssertion;
+use OneSpec\Assertions\ObjectAssertion;
+use OneSpec\Assertions\StringAssertion;
+use OneSpec\Exceptions\AssertionFailed;
+use OneSpec\Exceptions\InvalidAssertionMethod;
+use OneSpec\Result\Output;
+use OneSpec\Result\Status;
 
 class Assert
 {

@@ -6,7 +6,7 @@
  * Time: 15:36
  */
 
-namespace Xae3Oow5cahz9shahngu\Result;
+namespace OneSpec\Result;
 
 use function Functional\filter;
 use function Functional\flatten;

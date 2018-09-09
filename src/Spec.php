@@ -1,14 +1,14 @@
 <?php
 
-namespace Xae3Oow5cahz9shahngu;
+namespace OneSpec;
 
 use function Functional\each;
-use Xae3Oow5cahz9shahngu\Exceptions\AssertionFailed;
-use Xae3Oow5cahz9shahngu\Result\Color;
-use Xae3Oow5cahz9shahngu\Result\Icon;
-use Xae3Oow5cahz9shahngu\Result\Output;
-use Xae3Oow5cahz9shahngu\Result\Status;
-use Xae3Oow5cahz9shahngu\Result\Text;
+use OneSpec\Exceptions\AssertionFailed;
+use OneSpec\Result\Color;
+use OneSpec\Result\Icon;
+use OneSpec\Result\Output;
+use OneSpec\Result\Status;
+use OneSpec\Result\Text;
 
 class Spec
 {

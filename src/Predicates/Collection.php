@@ -6,14 +6,14 @@
  * Time: 18:12
  */
 
-namespace Xae3Oow5cahz9shahngu\Predicates;
+namespace OneSpec\Predicates;
 
 use function Functional\contains;
 use function Functional\reduce_left;
 use function Functional\reject;
-use Xae3Oow5cahz9shahngu\Result\Color;
-use Xae3Oow5cahz9shahngu\Result\Output;
-use Xae3Oow5cahz9shahngu\Result\Text;
+use OneSpec\Result\Color;
+use OneSpec\Result\Output;
+use OneSpec\Result\Text;
 
 trait Collection
 {
